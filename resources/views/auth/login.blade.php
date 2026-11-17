@@ -57,18 +57,7 @@
             <a href="{{ route('register') }}" class="text-brand-600 hover:underline font-bold ml-1">Register Company</a>
         </div>
 
-        <div class="mt-6 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 space-y-1.5">
-            <span class="text-slate-900 font-bold block">💡 Live System Accounts:</span>
-            <div class="flex justify-between items-center py-0.5">
-                <span class="text-slate-500">Lead Auditor (Nexteck):</span>
-                <span class="font-mono font-semibold text-slate-800">info@nexteck.co.uk</span>
-            </div>
-            <div class="flex justify-between items-center py-0.5">
-                <span class="text-slate-500">Demo UK Company:</span>
-                <span class="font-mono font-semibold text-slate-800">contact@acmeltd.co.uk</span>
-            </div>
-            <div class="text-[10px] text-slate-500 pt-1 border-t border-slate-200">Default Passwords: <span class="font-mono text-brand-700 font-semibold">Admin@12345</span> / <span class="font-mono text-brand-700 font-semibold">Password@123</span></div>
-        </div>
+        
 
     </div>
 </div>
