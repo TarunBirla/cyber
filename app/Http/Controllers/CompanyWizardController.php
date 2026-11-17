@@ -28,6 +28,22 @@ class CompanyWizardController extends Controller
                 'status' => 'draft'
             ]
         );
+
+        // Ensure Tab 9 IT Contact exists with Mohammed Nasar / Nexteck Limited defaults
+        if (!$company->itContact) {
+            ItContact::create([
+                'company_id' => $company->id,
+                'name' => 'Mohammed Nasar',
+                'job_role' => 'CEO & Enterprise Architect',
+                'email' => 'info@nexteck.co.uk',
+                'phone' => '07879 175585',
+                'provider_type' => 'Managed service provider (MSP)',
+                'external_provider_name' => 'Nexteck Limited (London, UK)',
+                'approver_admin_access' => 'Mohammed Nasar (Nexteck Limited)',
+                'person_applying_patches' => 'Mohammed Nasar (Nexteck Limited)',
+            ]);
+        }
+
         return $company;
     }
 
@@ -282,23 +298,9 @@ class CompanyWizardController extends Controller
         return back()->with('success', 'Software item removed.');
     }
 
-    // Step 9: IT Contact
+    // Step 9: IT Contact (Company confirmation - locked by default to Nexteck Limited)
     public function saveStep9(Request $request)
     {
-        $company = $this->getCompany();
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'job_role' => 'nullable|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'nullable|string|max:50',
-            'provider_type' => 'required|string',
-            'external_provider_name' => 'nullable|string|max:255',
-            'approver_admin_access' => 'nullable|string|max:255',
-            'person_applying_patches' => 'nullable|string|max:255',
-        ]);
-
-        $company->itContact()->updateOrCreate(['company_id' => $company->id], $validated);
-
-        return redirect()->route('company.summary')->with('success', 'IT Contact details saved. Review your Completeness & Risk checks.');
+        return redirect()->route('company.summary')->with('success', 'IT Governance confirmed. Verified with Lead Auditor (Nexteck Limited).');
     }
 }

@@ -19,7 +19,6 @@ class DatabaseSetupController extends Controller
         $secretKey = env('DB_SETUP_KEY', 'CyberEssentials2026Setup');
         $providedKey = $request->query('key');
 
-        // Optional token protection if key is defined
         if ($request->has('key') && $providedKey !== $secretKey) {
             return response()->json([
                 'success' => false,
@@ -45,8 +44,8 @@ class DatabaseSetupController extends Controller
             $migrationOutput = trim(Artisan::output());
             $log[] = nl2br($migrationOutput ?: 'Tables already up to date.');
 
-            // 3. Run seeders (Default Admin & Sample Data)
-            $log[] = "🌱 Seeding default Admin & UK Cyber Essentials structures...";
+            // 3. Run seeders (Default Admin: Mohammed Nasar - Nexteck Limited)
+            $log[] = "🌱 Seeding Lead Auditor (Mohammed Nasar) & Nexteck governance structures...";
             Artisan::call('db:seed', [
                 '--force' => true,
             ]);
@@ -81,7 +80,9 @@ class DatabaseSetupController extends Controller
                 'logs' => $log,
                 'tables' => $createdTables,
                 'elapsed' => $elapsed,
-                'admin_email' => 'admin@cyberessentials.uk',
+                'admin_name' => 'Mohammed Nasar',
+                'admin_role' => 'CEO & Enterprise Architect (Nexteck Limited)',
+                'admin_email' => 'info@nexteck.co.uk',
                 'admin_pass' => 'Admin@12345',
                 'demo_company_email' => 'contact@acmeltd.co.uk',
                 'demo_company_pass' => 'Password@123',

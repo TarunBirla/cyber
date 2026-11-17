@@ -19,7 +19,6 @@ Route::get('/', function () {
 
 // ==========================================
 // 🚀 LIVE DATABASE AUTO-SETUP ROUTE
-// Direct hit on live server creates all tables + default admin
 // ==========================================
 Route::get('/setup-db', [DatabaseSetupController::class, 'setup'])->name('setup.db');
 Route::get('/migrate-live-db', [DatabaseSetupController::class, 'setup']); // Alias
@@ -72,7 +71,7 @@ Route::middleware(['auth'])->prefix('company')->name('company.')->group(function
     Route::post('/step/8/software', [CompanyWizardController::class, 'addSoftware'])->name('software.add');
     Route::delete('/step/8/software/{id}', [CompanyWizardController::class, 'deleteSoftware'])->name('software.delete');
 
-    // Tab 9: IT Contact
+    // Tab 9: IT Contact (Confirmation only)
     Route::post('/step/9', [CompanyWizardController::class, 'saveStep9'])->name('step9.save');
 });
 
@@ -83,6 +82,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/company/{id}', [AdminController::class, 'showCompany'])->name('company.show');
     Route::post('/company', [AdminController::class, 'storeCompany'])->name('company.store');
+    Route::put('/company/{id}/it-contact', [AdminController::class, 'updateItContact'])->name('company.it-contact.update');
     Route::patch('/company/{id}/status', [AdminController::class, 'updateStatus'])->name('company.status');
     Route::delete('/company/{id}', [AdminController::class, 'deleteCompany'])->name('company.delete');
 });

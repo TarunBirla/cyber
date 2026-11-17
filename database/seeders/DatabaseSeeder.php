@@ -22,16 +22,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Create Default Admin
-        $admin = User::firstOrCreate(
-            ['email' => 'admin@cyberessentials.uk'],
+        // 1. Create Default Admin (Mohammed Nasar - Nexteck Limited)
+        $admin = User::updateOrCreate(
+            ['email' => 'info@nexteck.co.uk'],
             [
-                'name' => 'Cyber Essentials Lead Auditor',
-                'phone' => '+44 20 7946 0991',
+                'name' => 'Mohammed Nasar',
+                'phone' => '07879 175585',
                 'role' => 'admin',
                 'password' => Hash::make('Admin@12345'),
             ]
         );
+
+        // Also keep legacy alias admin if needed or update it
+        User::where('email', 'admin@cyberessentials.uk')->delete();
 
         // 2. Create Sample Demo Company (from Workbook example rows)
         $companyUser = User::firstOrCreate(
@@ -179,19 +182,19 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // IT Contact Sample
-        if (!$company->itContact) {
-            ItContact::create([
-                'company_id' => $company->id,
-                'name' => 'David Miller',
-                'job_role' => 'Head of Technology',
-                'email' => 'david.m@acmeltd.co.uk',
-                'phone' => '+44 20 7123 4599',
-                'provider_type' => 'Internal',
-                'external_provider_name' => '',
-                'approver_admin_access' => 'David Miller',
-                'person_applying_patches' => 'David Miller'
-            ]);
-        }
+        // IT Contact Sample (Locked to Mohammed Nasar / Nexteck Limited)
+        ItContact::updateOrCreate(
+            ['company_id' => $company->id],
+            [
+                'name' => 'Mohammed Nasar',
+                'job_role' => 'CEO & Enterprise Architect',
+                'email' => 'info@nexteck.co.uk',
+                'phone' => '07879 175585',
+                'provider_type' => 'Managed service provider (MSP)',
+                'external_provider_name' => 'Nexteck Limited (London, UK)',
+                'approver_admin_access' => 'Mohammed Nasar (Nexteck Limited)',
+                'person_applying_patches' => 'Mohammed Nasar (Nexteck Limited)'
+            ]
+        );
     }
 }
