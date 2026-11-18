@@ -11,16 +11,7 @@ echo Scanning installed software and applications...
 echo (Read-only: takes only 2-4 seconds, changes nothing)
 echo.
 
-node -v >nul 2>&1
-if %errorlevel% equ 0 (
-    if not exist "%~dp0list-installed-software.js" (
-        powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object Net.WebClient).DownloadFile('https://cyber.nexteck.uk/scripts/list-installed-software.js', '%~dp0list-installed-software.js')"
-    )
-    node "%~dp0list-installed-software.js" --json --out "%~dp0my-software.json"
-) else (
-    echo [INFO] Running native Windows software scanner...
-    powershell -NoProfile -ExecutionPolicy Bypass -Command "$paths = @('HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'); $items = Get-ItemProperty -Path $paths -ErrorAction SilentlyContinue | Where-Object { $_.DisplayName -and $_.SystemComponent -ne 1 -and $_.ParentKeyName -eq $null } | Select-Object @{N='name';E={$_.DisplayName}}, @{N='version';E={if($_.DisplayVersion){$_.DisplayVersion}else{'Latest'}}}, @{N='publisher';E={$_.Publisher}} | Sort-Object name -Unique; $out = [PSCustomObject]@{ machine = $env:COMPUTERNAME; os = (Get-CimInstance Win32_OperatingSystem).Caption; count = $items.Count; software = $items }; $outPath = Join-Path -Path '%~dp0' -ChildPath 'my-software.json'; $utf8NoBom = New-Object System.Text.UTF8Encoding($false); [System.IO.File]::WriteAllText($outPath, ($out | ConvertTo-Json -Depth 4), $utf8NoBom)"
-)
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$paths = @('HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'); $items = Get-ItemProperty -Path $paths -ErrorAction SilentlyContinue | Where-Object { $_.DisplayName -and $_.SystemComponent -ne 1 -and $_.ParentKeyName -eq $null } | Select-Object @{N='name';E={$_.DisplayName}}, @{N='version';E={if($_.DisplayVersion){$_.DisplayVersion}else{'Latest'}}}, @{N='publisher';E={$_.Publisher}} | Sort-Object name -Unique; $out = [PSCustomObject]@{ machine = $env:COMPUTERNAME; os = (Get-CimInstance Win32_OperatingSystem).Caption; count = $items.Count; software = $items }; $outPath = Join-Path -Path '%~dp0' -ChildPath 'my-software.json'; $utf8NoBom = New-Object System.Text.UTF8Encoding($false); [System.IO.File]::WriteAllText($outPath, ($out | ConvertTo-Json -Depth 4), $utf8NoBom)"
 
 if exist "%~dp0my-software.json" (
     echo ====================================================
