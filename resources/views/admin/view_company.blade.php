@@ -3,17 +3,17 @@
 @section('title', 'Auditor Review: ' . ($company->registered_name ?? 'Company'))
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+<div class="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
 
     <!-- Top Action Bar -->
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <a href="{{ route('admin.dashboard') }}" class="text-xs text-slate-500 hover:text-slate-900 flex items-center gap-1.5 font-bold">
             &larr; Back to Auditor Dashboard
         </a>
 
         <!-- Status Controller -->
-        <div class="flex items-center gap-3">
-            <form action="{{ route('admin.company.status', $company->id) }}" method="POST" class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+            <form action="{{ route('admin.company.status', $company->id) }}" method="POST" class="flex flex-wrap items-center gap-2">
                 @csrf
                 @method('PATCH')
                 <span class="text-xs font-semibold text-slate-500">Status:</span>
@@ -36,21 +36,21 @@
     </div>
 
     <!-- Company Header Card -->
-    <div class="ai-card rounded-3xl p-6 sm:p-8 border border-slate-200 mb-8 bg-white shadow-sm">
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+    <div class="ai-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 border border-slate-200 mb-6 sm:mb-8 bg-white shadow-sm">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-6">
             <div>
-                <div class="flex items-center gap-2.5">
+                <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
                     <span class="ai-badge bg-brand-50 text-brand-700 border border-brand-200">Scope Inspection</span>
                     <span class="text-xs text-slate-500 font-mono font-medium">Reg #: {{ $company->company_number ?? 'N/A' }}</span>
                 </div>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1.5">{{ $company->registered_name ?? $company->user->name }}</h1>
+                <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight mt-1.5 break-words">{{ $company->registered_name ?? $company->user->name }}</h1>
                 <p class="text-xs text-slate-500 mt-1">Trading as: {{ $company->trading_name ?? 'Same as registered' }} | Scope: {{ $company->certification_scope }} ({{ $company->certification_level }})</p>
             </div>
 
             <!-- Risk Badge -->
-            <div class="text-right">
-                <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">Audit Evaluation</div>
-                <div class="text-xl font-black {{ $audit['risk_flags']['total_risks'] > 0 ? 'text-red-600' : 'text-emerald-600' }} mt-0.5">
+            <div class="text-left md:text-right w-full md:w-auto pt-3 md:pt-0 border-t md:border-t-0 border-slate-100">
+                <div class="text-[10px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Audit Evaluation</div>
+                <div class="text-lg sm:text-xl font-black {{ $audit['risk_flags']['total_risks'] > 0 ? 'text-red-600' : 'text-emerald-600' }} mt-0.5">
                     {{ $audit['status'] }}
                 </div>
                 <div class="text-[11px] text-slate-500 mt-1">{{ $audit['percent_complete'] }}% Workbook Data Populated</div>
@@ -59,26 +59,26 @@
     </div>
 
     <!-- 9 Tabs Detailed Readout for Admin -->
-    <div class="space-y-8">
+    <div class="space-y-6 sm:space-y-8">
         
         <!-- Tab 1: Company Profile -->
-        <div class="ai-card rounded-3xl p-6 border border-slate-200 bg-white shadow-sm">
+        <div class="ai-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 bg-white shadow-sm">
             <h2 class="text-base font-extrabold text-slate-900 mb-4 flex items-center gap-2">
                 <span class="w-6 h-6 rounded-lg bg-brand-50 text-brand-700 flex items-center justify-center text-xs font-bold border border-brand-200">1</span>
                 Company Details
             </h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-xs">
                 <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
                     <span class="text-slate-400 block text-[10px] font-bold uppercase">Legal Structure</span>
-                    <span class="font-bold text-slate-800 mt-1 block">{{ $company->legal_structure ?? '-' }}</span>
+                    <span class="font-bold text-slate-800 mt-1 block break-words">{{ $company->legal_structure ?? '-' }}</span>
                 </div>
                 <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
                     <span class="text-slate-400 block text-[10px] font-bold uppercase">Registered Address</span>
-                    <span class="font-semibold text-slate-800 mt-1 block">{{ $company->address_line1 }}, {{ $company->city }} {{ $company->postcode }}</span>
+                    <span class="font-semibold text-slate-800 mt-1 block break-words">{{ $company->address_line1 }}, {{ $company->city }} {{ $company->postcode }}</span>
                 </div>
                 <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
                     <span class="text-slate-400 block text-[10px] font-bold uppercase">Corporate Contact</span>
-                    <span class="font-semibold text-slate-800 mt-1 block">{{ $company->email }} | {{ $company->phone ?? '-' }}</span>
+                    <span class="font-semibold text-slate-800 mt-1 block break-all">{{ $company->email }} | {{ $company->phone ?? '-' }}</span>
                 </div>
                 <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
                     <span class="text-slate-400 block text-[10px] font-bold uppercase">Headcount / SIC</span>
@@ -88,16 +88,17 @@
         </div>
 
         <!-- Tab 2: Staff -->
-        <div class="ai-card rounded-3xl p-6 border border-slate-200 bg-white shadow-sm">
-            <h2 class="text-base font-extrabold text-slate-900 mb-4 flex items-center justify-between">
+        <div class="ai-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 bg-white shadow-sm">
+            <h2 class="text-base font-extrabold text-slate-900 mb-3 sm:mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
                 <span class="flex items-center gap-2">
                     <span class="w-6 h-6 rounded-lg bg-brand-50 text-brand-700 flex items-center justify-center text-xs font-bold border border-brand-200">2</span>
                     Staff & Scope Inventory ({{ $company->staffMembers->count() }})
                 </span>
                 <span class="text-xs font-bold text-amber-600">WFH: {{ $audit['wfh_count'] }} | Personal Devices: {{ $audit['personal_device_staff'] }}</span>
             </h2>
-            <div class="overflow-x-auto rounded-2xl border border-slate-200">
-                <table class="w-full text-left text-xs text-slate-700">
+            <p class="text-[11px] text-slate-400 md:hidden mb-2">← Swipe table horizontally to see all columns →</p>
+            <div class="overflow-x-auto touch-scroll rounded-2xl border border-slate-200">
+                <table class="w-full text-left text-xs text-slate-700 min-w-[650px] whitespace-nowrap">
                     <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold border-b border-slate-200">
                         <tr>
                             <th class="p-3">Name</th>
@@ -127,14 +128,15 @@
         </div>
 
         <!-- Tab 3 & 4: Endpoints (Computers & Mobiles) -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="ai-card rounded-3xl p-6 border border-slate-200 bg-white shadow-sm">
-                <h2 class="text-base font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+            <div class="ai-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 bg-white shadow-sm">
+                <h2 class="text-base font-extrabold text-slate-900 mb-3 sm:mb-4 flex items-center gap-2">
                     <span class="w-6 h-6 rounded-lg bg-brand-50 text-brand-700 flex items-center justify-center text-xs font-bold border border-brand-200">3</span>
                     Computers (Total Qty: {{ $audit['computer_qty'] }})
                 </h2>
-                <div class="overflow-x-auto rounded-2xl border border-slate-200">
-                    <table class="w-full text-left text-xs text-slate-700">
+                <p class="text-[11px] text-slate-400 sm:hidden mb-2">← Swipe table horizontally to see all columns →</p>
+                <div class="overflow-x-auto touch-scroll rounded-2xl border border-slate-200">
+                    <table class="w-full text-left text-xs text-slate-700 min-w-[440px] whitespace-nowrap">
                         <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold border-b border-slate-200">
                             <tr>
                                 <th class="p-2.5">Device</th>
@@ -163,13 +165,14 @@
                 </div>
             </div>
 
-            <div class="ai-card rounded-3xl p-6 border border-slate-200 bg-white shadow-sm">
-                <h2 class="text-base font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+            <div class="ai-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 bg-white shadow-sm">
+                <h2 class="text-base font-extrabold text-slate-900 mb-3 sm:mb-4 flex items-center gap-2">
                     <span class="w-6 h-6 rounded-lg bg-brand-50 text-brand-700 flex items-center justify-center text-xs font-bold border border-brand-200">4</span>
                     Mobiles & Tablets (Total Qty: {{ $audit['mobile_qty'] }})
                 </h2>
-                <div class="overflow-x-auto rounded-2xl border border-slate-200">
-                    <table class="w-full text-left text-xs text-slate-700">
+                <p class="text-[11px] text-slate-400 sm:hidden mb-2">← Swipe table horizontally to see all columns →</p>
+                <div class="overflow-x-auto touch-scroll rounded-2xl border border-slate-200">
+                    <table class="w-full text-left text-xs text-slate-700 min-w-[440px] whitespace-nowrap">
                         <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold border-b border-slate-200">
                             <tr>
                                 <th class="p-2.5">Device</th>
@@ -196,13 +199,13 @@
         </div>
 
         <!-- Tab 5, 6, 7: Servers, Network, Cloud -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <!-- Servers -->
-            <div class="ai-card rounded-3xl p-5 border border-slate-200 bg-white shadow-sm">
+            <div class="ai-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 bg-white shadow-sm">
                 <h2 class="text-sm font-bold text-slate-900 mb-3">5. Servers ({{ $audit['server_qty'] }})</h2>
                 @forelse($company->servers as $srv)
                     <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs mb-2">
-                        <div class="font-bold text-slate-900">{{ $srv->server_name }} ({{ $srv->type }})</div>
+                        <div class="font-bold text-slate-900 break-words">{{ $srv->server_name }} ({{ $srv->type }})</div>
                         <div class="text-[11px] text-slate-500">{{ $srv->operating_system }} {{ $srv->os_version }}</div>
                     </div>
                 @empty
@@ -211,11 +214,11 @@
             </div>
 
             <!-- Network -->
-            <div class="ai-card rounded-3xl p-5 border border-slate-200 bg-white shadow-sm">
+            <div class="ai-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 bg-white shadow-sm">
                 <h2 class="text-sm font-bold text-slate-900 mb-3">6. Network ({{ $audit['network_count'] }})</h2>
                 @forelse($company->networkDevices as $net)
                     <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs mb-2">
-                        <div class="font-bold text-slate-900">{{ $net->make }} {{ $net->model }}</div>
+                        <div class="font-bold text-slate-900 break-words">{{ $net->make }} {{ $net->model }}</div>
                         <div class="text-[11px] font-semibold {{ $net->default_password_changed == 'Yes' ? 'text-emerald-600' : 'text-red-600' }}">
                             Default Password Changed: {{ $net->default_password_changed }}
                         </div>
@@ -226,11 +229,11 @@
             </div>
 
             <!-- Cloud -->
-            <div class="ai-card rounded-3xl p-5 border border-slate-200 bg-white shadow-sm">
+            <div class="ai-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 bg-white shadow-sm sm:col-span-2 lg:col-span-1">
                 <h2 class="text-sm font-bold text-slate-900 mb-3">7. Cloud Services ({{ $audit['cloud_count'] }})</h2>
                 @forelse($company->cloudServices as $cld)
                     <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs mb-2">
-                        <div class="font-bold text-slate-900">{{ $cld->service_name }} ({{ $cld->users_count }} users)</div>
+                        <div class="font-bold text-slate-900 break-words">{{ $cld->service_name }} ({{ $cld->users_count }} users)</div>
                         <div class="text-[11px] font-semibold {{ $cld->mfa_enabled == 'Yes' ? 'text-emerald-600' : 'text-red-600' }}">
                             MFA Enabled: {{ $cld->mfa_enabled }}
                         </div>
@@ -242,17 +245,17 @@
         </div>
 
         <!-- Tab 8 & 9: Software & IT Contact (Admin Editable) -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="ai-card rounded-3xl p-6 border border-slate-200 bg-white shadow-sm">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+            <div class="ai-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 bg-white shadow-sm">
                 <h2 class="text-base font-extrabold text-slate-900 mb-4">8. Software Applications ({{ $audit['software_count'] }})</h2>
                 <div class="space-y-2 text-xs">
                     @forelse($company->softwareItems as $sw)
-                        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex justify-between items-center">
+                        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div>
-                                <span class="font-bold text-slate-900">{{ $sw->software_name }}</span>
+                                <span class="font-bold text-slate-900 break-words">{{ $sw->software_name }}</span>
                                 <span class="text-slate-500 text-[11px] block">{{ $sw->category }} ({{ $sw->vendor ?? 'Generic' }})</span>
                             </div>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold {{ $sw->still_supported == 'Yes' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200' }}">
+                            <span class="self-start sm:self-center px-2 py-0.5 rounded text-[10px] font-bold {{ $sw->still_supported == 'Yes' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200' }}">
                                 Supported: {{ $sw->still_supported }}
                             </span>
                         </div>
@@ -263,7 +266,7 @@
             </div>
 
             <!-- Tab 9: IT Contact & Governance (Admin Has Power To Modify) -->
-            <div class="ai-card rounded-3xl p-6 border border-slate-200 bg-white shadow-sm">
+            <div class="ai-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 bg-white shadow-sm">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-base font-extrabold text-slate-900">9. IT Contact & Governance (Admin Edit)</h2>
                     <span class="ai-badge bg-emerald-50 text-emerald-700 border border-emerald-200">Admin Control</span>
@@ -274,7 +277,7 @@
                 <form action="{{ route('admin.company.it-contact.update', $company->id) }}" method="POST" class="space-y-3 text-xs">
                     @csrf
                     @method('PUT')
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block font-bold text-slate-700 uppercase tracking-wider text-[10px] mb-1">Contact Name</label>
                             <input type="text" name="name" value="{{ old('name', $contact->name ?? 'Mohammed Nasar') }}" required
@@ -319,8 +322,8 @@
                         </div>
                     </div>
 
-                    <div class="pt-2 text-right">
-                        <button type="submit" class="py-2 px-5 rounded-xl font-bold text-xs bg-slate-900 hover:bg-slate-800 text-white transition shadow-sm">
+                    <div class="pt-2 flex justify-end">
+                        <button type="submit" class="w-full sm:w-auto py-2.5 px-5 rounded-xl font-bold text-xs bg-slate-900 hover:bg-slate-800 text-white transition shadow-sm">
                             Save IT Governance Updates
                         </button>
                     </div>
