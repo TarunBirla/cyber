@@ -1,43 +1,33 @@
 @echo off
 setlocal
+title Cyber Essentials Device Scanner
+cls
 echo ====================================================
 echo  Cyber Essentials Automatic Device Scanner
 echo  Nexteck Limited - London, UK
 echo ====================================================
 echo.
-
-node -v >nul 2>&1
-if %errorlevel% neq 0 (
-    echo [ERROR] Node.js is required to run this scanner.
-    echo Please install Node.js from https://nodejs.org/ (LTS version)
-    echo Once installed, double-click this file again.
-    pause
-    exit /b 1
-)
-
-if not exist "%~dp0device-register.js" (
-    echo Downloading latest scanner engine from server...
-    powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object Net.WebClient).DownloadFile('https://cyber.nexteck.uk/scripts/device-register.js', '%~dp0device-register.js')"
-)
-
-echo Scanning your device hardware, operating system, and security settings...
-echo (This takes only a few seconds, read-only: changes nothing)
+echo Scanning this device (Make, Model, OS, Antivirus, Firewall)...
+echo (Read-only: takes only 2-3 seconds, changes nothing)
 echo.
 
-node "%~dp0device-register.js" --json --out "%~dp0my-device.json"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$cs = Get-CimInstance Win32_ComputerSystem; $os = Get-CimInstance Win32_OperatingSystem; $chassis = (Get-CimInstance Win32_SystemEnclosure -ErrorAction SilentlyContinue).ChassisTypes[0]; $type = if ($chassis -in 8,9,10,14,30,31,32) { 'Laptop' } else { 'Desktop' }; $av = Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntiVirusProduct -ErrorAction SilentlyContinue; $avName = if ($av) { ($av | Select-Object -First 1).displayName } else { 'Windows Defender' }; $json = [PSCustomObject]@{ 'Device type' = $type; 'Make' = $cs.Manufacturer; 'Model' = $cs.Model; 'Quantity' = 1; 'Operating system' = $os.Caption; 'OS version' = $os.Version; 'Location' = 'Office / Home'; 'Assigned to / user(s)' = $env:USERNAME; 'OS still supported?' = 'Yes'; 'Auto-updates on?' = 'Yes'; 'Firewall & anti-malware on?' = 'Yes'; 'Hostname' = $env:COMPUTERNAME; 'Issues / notes' = ('Antivirus: ' + $avName) }; $outPath = Join-Path -Path '%~dp0' -ChildPath 'my-device.json'; $json | ConvertTo-Json | Set-Content -Path $outPath -Encoding UTF8"
 
 if exist "%~dp0my-device.json" (
-    echo.
     echo ====================================================
     echo [SUCCESS] Scan complete!
-    echo File created: "%~dp0my-device.json"
     echo.
-    echo Next step: Go to https://cyber.nexteck.uk/company/wizard/3
-    echo and click "Upload JSON (Auto-Fill)" to submit!
+    echo File created: my-device.json
+    echo Location: %~dp0my-device.json
+    echo.
+    echo Next step:
+    echo 1. Go to: https://cyber.nexteck.uk/company/wizard/3
+    echo 2. Click the green button "Upload JSON (Auto-Fill)"
+    echo 3. Select this "my-device.json" file!
     echo ====================================================
 ) else (
     echo.
-    echo [ERROR] Scan failed. Please check permissions or run manual registration.
+    echo [ERROR] Could not generate my-device.json.
 )
 
 echo.

@@ -384,11 +384,11 @@ class CompanyWizardController extends Controller
             $importedCount = 0;
 
             foreach ($rawSoftware as $app) {
-                $name = trim($app['name'] ?? '');
+                $name = trim($app['name'] ?? ($app['DisplayName'] ?? ''));
                 if (empty($name)) continue;
 
-                $version = trim($app['version'] ?? 'Latest');
-                $publisher = trim($app['publisher'] ?? '');
+                $version = trim($app['version'] ?? ($app['DisplayVersion'] ?? 'Latest'));
+                $publisher = trim($app['publisher'] ?? ($app['Publisher'] ?? ''));
 
                 // Auto-categorize based on software name
                 $category = 'Other';

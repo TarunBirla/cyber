@@ -1,43 +1,42 @@
 @echo off
 setlocal
+title Cyber Essentials Software Inventory Scanner
+cls
 echo ====================================================
 echo  Cyber Essentials Software Inventory Scanner
 echo  Nexteck Limited - London, UK
 echo ====================================================
 echo.
-
-node -v >nul 2>&1
-if %errorlevel% neq 0 (
-    echo [ERROR] Node.js is required to run this scanner.
-    echo Please install Node.js from https://nodejs.org/ (LTS version)
-    echo Once installed, double-click this file again.
-    pause
-    exit /b 1
-)
-
-if not exist "%~dp0list-installed-software.js" (
-    echo Downloading latest software scanner engine from server...
-    powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object Net.WebClient).DownloadFile('https://cyber.nexteck.uk/scripts/list-installed-software.js', '%~dp0list-installed-software.js')"
-)
-
-echo Scanning installed applications and software inventory...
-echo (Read-only: collects name, version, vendor and security status)
+echo Scanning installed software and applications...
+echo (Read-only: takes only 2-4 seconds, changes nothing)
 echo.
 
-node "%~dp0list-installed-software.js" --json --out "%~dp0my-software.json"
+node -v >nul 2>&1
+if %errorlevel% equ 0 (
+    if not exist "%~dp0list-installed-software.js" (
+        powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object Net.WebClient).DownloadFile('https://cyber.nexteck.uk/scripts/list-installed-software.js', '%~dp0list-installed-software.js')"
+    )
+    node "%~dp0list-installed-software.js" --json --out "%~dp0my-software.json"
+) else (
+    echo [INFO] Running native Windows software scanner...
+    powershell -NoProfile -ExecutionPolicy Bypass -Command "$paths = @('HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'); $items = Get-ItemProperty -Path $paths -ErrorAction SilentlyContinue | Where-Object { $_.DisplayName -and $_.SystemComponent -ne 1 -and $_.ParentKeyName -eq $null } | Select-Object @{N='name';E={$_.DisplayName}}, @{N='version';E={if($_.DisplayVersion){$_.DisplayVersion}else{'Latest'}}}, @{N='publisher';E={$_.Publisher}} | Sort-Object name -Unique; $out = [PSCustomObject]@{ machine = $env:COMPUTERNAME; os = (Get-CimInstance Win32_OperatingSystem).Caption; count = $items.Count; software = $items }; $outPath = Join-Path -Path '%~dp0' -ChildPath 'my-software.json'; $out | ConvertTo-Json -Depth 4 | Set-Content -Path $outPath -Encoding UTF8"
+)
 
 if exist "%~dp0my-software.json" (
-    echo.
     echo ====================================================
     echo [SUCCESS] Software scan complete!
-    echo File created: "%~dp0my-software.json"
     echo.
-    echo Next step: Go to https://cyber.nexteck.uk/company/wizard/8
-    echo and click "Upload JSON (Auto-Fill)" to submit!
+    echo File created: my-software.json
+    echo Location: %~dp0my-software.json
+    echo.
+    echo Next step:
+    echo 1. Go to: https://cyber.nexteck.uk/company/wizard/8
+    echo 2. Click the green button "Upload JSON (Auto-Fill)"
+    echo 3. Select this "my-software.json" file!
     echo ====================================================
 ) else (
     echo.
-    echo [ERROR] Scan failed. Please check permissions or run manual registration.
+    echo [ERROR] Could not generate my-software.json.
 )
 
 echo.
