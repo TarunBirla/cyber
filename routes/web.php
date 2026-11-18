@@ -49,6 +49,7 @@ Route::middleware(['auth'])->prefix('company')->name('company.')->group(function
 
     // Tab 3: Computers
     Route::post('/step/3/computer', [CompanyWizardController::class, 'addComputer'])->name('computer.add');
+    Route::post('/step/3/computer/upload-scan', [CompanyWizardController::class, 'uploadDeviceScan'])->name('computer.upload_scan');
     Route::delete('/step/3/computer/{id}', [CompanyWizardController::class, 'deleteComputer'])->name('computer.delete');
 
     // Tab 4: Mobiles & Tablets
@@ -69,6 +70,7 @@ Route::middleware(['auth'])->prefix('company')->name('company.')->group(function
 
     // Tab 8: Software
     Route::post('/step/8/software', [CompanyWizardController::class, 'addSoftware'])->name('software.add');
+    Route::post('/step/8/software/upload-scan', [CompanyWizardController::class, 'uploadSoftwareScan'])->name('software.upload_scan');
     Route::delete('/step/8/software/{id}', [CompanyWizardController::class, 'deleteSoftware'])->name('software.delete');
 
     // Tab 9: IT Contact (Confirmation only)

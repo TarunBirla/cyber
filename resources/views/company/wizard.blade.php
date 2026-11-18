@@ -352,7 +352,7 @@
         {{-- ========================================================== --}}
         @if($step == 3)
         <div>
-            <div class="mb-6 pb-4 border-b border-slate-100 flex items-center justify-between">
+            <div class="mb-6 pb-4 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2.5">
                         <span class="w-8 h-8 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center text-sm font-bold border border-brand-200">3</span>
@@ -360,76 +360,151 @@
                     </h2>
                     <p class="text-xs text-slate-500 mt-1">One row per model/OS group, or one per device. Operating systems must still receive security updates.</p>
                 </div>
+                <div class="flex items-center gap-2">
+                    <span class="ai-badge bg-brand-50 text-brand-700 border border-brand-200">Automated Audit Available</span>
+                </div>
             </div>
 
-            <!-- Add Computer Form -->
-            <form action="{{ route('company.computer.add') }}" method="POST" class="p-5 rounded-2xl bg-slate-50 border border-slate-200 mb-8">
+            <!-- SMART SCAN HELPER BANNER FOR NON-TECHNICAL USERS -->
+            <div class="p-6 rounded-3xl bg-gradient-to-br from-brand-50 via-teal-50/40 to-slate-50 border border-brand-200 mb-8 shadow-sm">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="ai-badge bg-white text-brand-700 border border-brand-200">🤖 Non-Technical 1-Click Scan</span>
+                            <span class="text-xs font-bold text-slate-700">Don't know your exact OS Build or Anti-malware details?</span>
+                        </div>
+                        <h3 class="text-base font-extrabold text-slate-900">Run the Automatic Cyber Essentials Scanner on this Mac/PC</h3>
+                        <p class="text-xs text-slate-600 max-w-2xl leading-relaxed">
+                            Run our lightweight, read-only script. It inspects your <strong>Make, Model, OS Version, Support Lifespan, Firewall, and Antivirus</strong> in 5 seconds and generates a <code class="font-mono bg-white px-1.5 py-0.5 rounded border border-slate-200 text-brand-700 font-bold">my-device.json</code> file.
+                        </p>
+                    </div>
+
+                    <!-- Scan Actions -->
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+                        <div class="dropdown relative inline-block text-left">
+                            <button type="button" onclick="document.getElementById('scanScriptGuide').classList.toggle('hidden')" 
+                                class="w-full sm:w-auto px-4 py-2.5 rounded-xl font-bold text-xs bg-white text-brand-700 border border-brand-300 hover:bg-brand-50 transition shadow-sm flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                <span>Get Scanner Script</span>
+                            </button>
+                        </div>
+
+                        <!-- Direct JSON File Upload Form -->
+                        <form action="{{ route('company.computer.upload_scan') }}" method="POST" enctype="multipart/form-data" class="flex items-center gap-2">
+                            @csrf
+                            <label class="cursor-pointer px-4 py-2.5 rounded-xl font-bold text-xs bg-brand-600 hover:bg-brand-700 text-white transition shadow-sm flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                <span>Upload JSON (Auto-Fill)</span>
+                                <input type="file" name="device_file" accept=".json,.txt" class="hidden" onchange="this.form.submit()">
+                            </label>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Step-by-Step Instructions Toggle Panel -->
+                <div id="scanScriptGuide" class="mt-5 pt-5 border-t border-brand-200/80 hidden text-xs">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-2xl bg-white border border-slate-200">
+                            <div class="font-bold text-slate-900 mb-1 flex items-center gap-2">
+                                <span class="w-5 h-5 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-[11px] font-bold">W</span>
+                                Windows (1-Click Run)
+                            </div>
+                            <p class="text-[11px] text-slate-500 mb-2">Option A: Download and double click our Windows batch file:</p>
+                            <a href="/scripts/scan-windows.bat" download class="inline-flex items-center gap-1.5 text-brand-600 font-bold hover:underline mb-2">
+                                <span>Download scan-windows.bat</span> &darr;
+                            </a>
+                            <p class="text-[11px] text-slate-500 mt-1">Option B: In terminal / command prompt run:</p>
+                            <code class="block font-mono bg-slate-50 p-2 rounded-lg border border-slate-200 text-slate-800 text-[11px] select-all mt-1">
+                                node device-register.js --json --out my-device.json
+                            </code>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-white border border-slate-200">
+                            <div class="font-bold text-slate-900 mb-1 flex items-center gap-2">
+                                <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center text-[11px] font-bold">M</span>
+                                Apple Mac (macOS Terminal)
+                            </div>
+                            <p class="text-[11px] text-slate-500 mb-2">Open Terminal app on your Mac and run this one-line command:</p>
+                            <code class="block font-mono bg-slate-50 p-2 rounded-lg border border-slate-200 text-slate-800 text-[11px] select-all mt-1">
+                                curl -s https://cyber.nexteck.uk/scripts/device-register.js | node - --json --out my-device.json
+                            </code>
+                            <p class="text-[10px] text-slate-400 mt-2">Then upload the generated <code class="font-mono text-slate-600 font-bold">my-device.json</code> using the green button above!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manual Add Computer Form -->
+            <form id="manualComputerForm" action="{{ route('company.computer.add') }}" method="POST" class="p-5 rounded-2xl bg-slate-50 border border-slate-200 mb-8">
                 @csrf
-                <div class="text-xs font-bold text-brand-700 uppercase tracking-wider mb-4 flex items-center gap-2">
-                    <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    Register Computer Asset Group
+                <div class="flex items-center justify-between mb-4">
+                    <div class="text-xs font-bold text-brand-700 uppercase tracking-wider flex items-center gap-2">
+                        <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <span>Manual Computer Registration Form</span>
+                    </div>
+                    <span class="text-[11px] text-slate-400">Or paste scanner JSON into upload button above</span>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Device Type *</label>
-                        <select name="device_type" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
+                        <select name="device_type" id="input_device_type" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
                             <option value="Laptop">Laptop</option>
                             <option value="Desktop">Desktop</option>
                             <option value="Workstation">Workstation</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Make</label>
-                        <input type="text" name="make" placeholder="e.g. Dell, Apple, Lenovo"
+                        <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Make *</label>
+                        <input type="text" name="make" id="input_make" required placeholder="e.g. Dell, Apple, Lenovo, HP"
                             class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Model (Optional)</label>
-                        <input type="text" name="model" placeholder="e.g. Latitude 5440"
+                        <input type="text" name="model" id="input_model" placeholder="e.g. Latitude 5440 / MacBook Pro"
                             class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Quantity *</label>
-                        <input type="number" name="quantity" value="1" min="1" required
+                        <input type="number" name="quantity" id="input_quantity" value="1" min="1" required
                             class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Operating System *</label>
-                        <input type="text" name="operating_system" required placeholder="e.g. Windows 11 Pro, macOS"
+                        <input type="text" name="operating_system" id="input_operating_system" required placeholder="e.g. Windows 11 Pro, macOS Sonoma"
                             class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">OS Version</label>
-                        <input type="text" name="os_version" placeholder="e.g. 24H2, Sonoma"
+                        <input type="text" name="os_version" id="input_os_version" placeholder="e.g. 24H2, 14.5"
                             class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Location</label>
-                        <input type="text" name="location" placeholder="e.g. Office / Home"
+                        <input type="text" name="location" id="input_location" placeholder="e.g. Office / Home"
                             class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Assigned To / User(s)</label>
-                        <input type="text" name="assigned_to" placeholder="e.g. All staff"
+                        <input type="text" name="assigned_to" id="input_assigned_to" placeholder="e.g. All staff / Jane Smith"
                             class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">OS Supported? *</label>
-                        <select name="os_supported" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
+                        <select name="os_supported" id="input_os_supported" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
                             <option value="Yes">Yes (Receiving security updates)</option>
                             <option value="No">No (OUT OF SUPPORT - Risk Flag!)</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Auto-updates On? *</label>
-                        <select name="auto_updates_on" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
+                        <select name="auto_updates_on" id="input_auto_updates_on" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
                             <option value="Yes">Yes</option>
                             <option value="No">No</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Firewall & Anti-malware On? *</label>
-                        <select name="security_software_on" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
+                        <select name="security_software_on" id="input_security_software_on" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
                             <option value="Yes">Yes</option>
                             <option value="No">No</option>
                         </select>
@@ -1062,6 +1137,75 @@
                         Software & Installed Applications
                     </h2>
                     <p class="text-xs text-slate-500 mt-1">Web browsers, antivirus/anti-malware, email clients and office applications. Must still be vendor-supported.</p>
+                </div>
+            </div>
+
+            <!-- 1-Click Software Scanner Banner for Non-Technical Users -->
+            <div class="mb-8 p-5 rounded-2xl bg-gradient-to-r from-brand-50/70 via-blue-50/40 to-slate-50 border border-brand-200">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="ai-badge bg-white text-brand-700 border border-brand-200">🤖 Non-Technical 1-Click Software Scan</span>
+                            <span class="text-xs font-bold text-slate-700">Don't know all installed software versions or EOL status?</span>
+                        </div>
+                        <h3 class="text-base font-extrabold text-slate-900">Run the Automatic Installed Software & Security Scanner</h3>
+                        <p class="text-xs text-slate-600 max-w-2xl leading-relaxed">
+                            Run our lightweight, read-only script. It automatically audits your <strong>Web Browsers, Antivirus / EDR, Email Clients, and Office Applications</strong>, flags out-of-support apps, and checks against CISA KEV vulnerabilities in seconds.
+                        </p>
+                    </div>
+
+                    <!-- Scan Actions -->
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+                        <div class="dropdown relative inline-block text-left">
+                            <button type="button" onclick="document.getElementById('softwareScanScriptGuide').classList.toggle('hidden')" 
+                                class="w-full sm:w-auto px-4 py-2.5 rounded-xl font-bold text-xs bg-white text-brand-700 border border-brand-300 hover:bg-brand-50 transition shadow-sm flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                <span>Get Software Scanner</span>
+                            </button>
+                        </div>
+
+                        <!-- Direct JSON File Upload Form -->
+                        <form action="{{ route('company.software.upload_scan') }}" method="POST" enctype="multipart/form-data" class="flex items-center gap-2">
+                            @csrf
+                            <label class="cursor-pointer px-4 py-2.5 rounded-xl font-bold text-xs bg-brand-600 hover:bg-brand-700 text-white transition shadow-sm flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                <span>Upload JSON (Auto-Fill)</span>
+                                <input type="file" name="software_file" accept=".json,.txt" class="hidden" onchange="this.form.submit()">
+                            </label>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Step-by-Step Instructions Toggle Panel -->
+                <div id="softwareScanScriptGuide" class="mt-5 pt-5 border-t border-brand-200/80 hidden text-xs">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-2xl bg-white border border-slate-200">
+                            <div class="font-bold text-slate-900 mb-1 flex items-center gap-2">
+                                <span class="w-5 h-5 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-[11px] font-bold">W</span>
+                                Windows (1-Click Run)
+                            </div>
+                            <p class="text-[11px] text-slate-500 mb-2">Option A: Download and double click our Windows batch file:</p>
+                            <a href="/scripts/scan-software-windows.bat" download class="inline-flex items-center gap-1.5 text-brand-600 font-bold hover:underline mb-2">
+                                <span>Download scan-software-windows.bat</span> &darr;
+                            </a>
+                            <p class="text-[11px] text-slate-500 mt-1">Option B: In terminal / command prompt run:</p>
+                            <code class="block font-mono bg-slate-50 p-2 rounded-lg border border-slate-200 text-slate-800 text-[11px] select-all mt-1">
+                                node list-installed-software.js --json --out my-software.json
+                            </code>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-white border border-slate-200">
+                            <div class="font-bold text-slate-900 mb-1 flex items-center gap-2">
+                                <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center text-[11px] font-bold">M</span>
+                                Apple Mac (macOS Terminal)
+                            </div>
+                            <p class="text-[11px] text-slate-500 mb-2">Open Terminal app on your Mac and run this one-line command:</p>
+                            <code class="block font-mono bg-slate-50 p-2 rounded-lg border border-slate-200 text-slate-800 text-[11px] select-all mt-1">
+                                curl -s https://cyber.nexteck.uk/scripts/list-installed-software.js | node - --json --out my-software.json
+                            </code>
+                            <p class="text-[10px] text-slate-400 mt-2">Then upload the generated <code class="font-mono text-slate-600 font-bold">my-software.json</code> using the green button above!</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 

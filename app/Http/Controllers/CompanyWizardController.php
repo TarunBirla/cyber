@@ -154,7 +154,61 @@ class CompanyWizardController extends Controller
         ]);
 
         $company->computers()->create($validated);
-        return back()->with('success', 'Computer asset added.');
+        return back()->with('success', 'Computer asset added successfully.');
+    }
+
+    /**
+     * Non-technical users: Upload JSON produced by device-register.js
+     * Automatically parse and register the computer asset.
+     */
+    public function uploadDeviceScan(Request $request)
+    {
+        $company = $this->getCompany();
+        
+        $request->validate([
+            'device_file' => 'required|file|mimes:json,txt|max:5120',
+        ]);
+
+        try {
+            $content = file_get_contents($request->file('device_file')->getRealPath());
+            $json = json_decode($content, true);
+
+            if (!$json) {
+                return back()->withErrors(['device_file' => 'The uploaded file is not a valid JSON output.']);
+            }
+
+            // Extract device object from script format { generatedAt: ..., device: { ... } } or direct { ... }
+            $device = $json['device'] ?? ($json['devices'][0] ?? $json);
+
+            // Map fields cleanly
+            $deviceType = $device['Device type'] ?? 'Laptop';
+            if (!in_array($deviceType, ['Laptop', 'Desktop', 'Workstation'])) {
+                $deviceType = 'Laptop';
+            }
+
+            $osSupported = ($device['OS still supported?'] === 'Yes') ? 'Yes' : 'No';
+            $autoUpdates = ($device['Auto-updates on?'] === 'Yes') ? 'Yes' : 'No';
+            $securityOn = ($device['Firewall & anti-malware on?'] === 'Yes') ? 'Yes' : 'No';
+
+            $computer = $company->computers()->create([
+                'device_type' => $deviceType,
+                'make' => $device['Make'] ?? 'Unknown',
+                'model' => $device['Model'] ?? 'Unknown Model',
+                'quantity' => (int)($device['Quantity'] ?? 1),
+                'operating_system' => $device['Operating system'] ?? 'Windows / macOS',
+                'os_version' => $device['OS version'] ?? '',
+                'location' => $device['Location'] ?? 'Office / Home',
+                'assigned_to' => $device['Assigned to / user(s)'] ?? auth()->user()->name,
+                'os_supported' => $osSupported,
+                'auto_updates_on' => $autoUpdates,
+                'security_software_on' => $securityOn,
+            ]);
+
+            return back()->with('success', "Auto-Scan Success! Computer '{$computer->make} {$computer->model}' ({$computer->operating_system}) automatically registered in your inventory.");
+
+        } catch (\Throwable $e) {
+            return back()->withErrors(['device_file' => 'Failed to parse device file: ' . $e->getMessage()]);
+        }
     }
 
     public function deleteComputer($id)
@@ -289,6 +343,109 @@ class CompanyWizardController extends Controller
 
         $company->softwareItems()->create($validated);
         return back()->with('success', 'Software item registered in inventory.');
+    }
+
+    /**
+     * Non-technical users: Upload JSON produced by list-installed-software.js
+     * Automatically registers applications into the inventory with categories & support check.
+     */
+    public function uploadSoftwareScan(Request $request)
+    {
+        $company = $this->getCompany();
+
+        $request->validate([
+            'software_file' => 'required|file|mimes:json,txt|max:10240',
+        ]);
+
+        try {
+            $content = file_get_contents($request->file('software_file')->getRealPath());
+            $json = json_decode($content, true);
+
+            if (!$json) {
+                return back()->withErrors(['software_file' => 'The uploaded file is not valid JSON.']);
+            }
+
+            $rawSoftware = $json['software'] ?? ($json['apps'] ?? (is_array($json) && isset($json[0]['name']) ? $json : []));
+
+            if (empty($rawSoftware)) {
+                return back()->withErrors(['software_file' => 'No software entries found in the uploaded file.']);
+            }
+
+            // Extract high/critical security findings if script was run with --security
+            $securityFindings = [];
+            if (!empty($json['security']['findings'])) {
+                foreach ($json['security']['findings'] as $f) {
+                    $key = strtolower(trim($f['software']));
+                    $securityFindings[$key] = $f['reason'] ?? 'Security exposure detected';
+                }
+            }
+
+            $machineName = $json['machine'] ?? 'Laptops & Workstations';
+            $importedCount = 0;
+
+            foreach ($rawSoftware as $app) {
+                $name = trim($app['name'] ?? '');
+                if (empty($name)) continue;
+
+                $version = trim($app['version'] ?? 'Latest');
+                $publisher = trim($app['publisher'] ?? '');
+
+                // Auto-categorize based on software name
+                $category = 'Other';
+                $nameLower = strtolower($name);
+
+                if (preg_match('/chrome|firefox|edge|safari|opera|brave/i', $nameLower)) {
+                    $category = 'Web browser';
+                } elseif (preg_match('/defender|antivirus|malware|sophos|crowdstrike|sentinel|eset|bitdefender|mcafee|norton|kaspersky|avast/i', $nameLower)) {
+                    $category = 'Antivirus / EDR';
+                } elseif (preg_match('/outlook|thunderbird|mail/i', $nameLower)) {
+                    $category = 'Email client';
+                } elseif (preg_match('/office|word|excel|powerpoint|teams|zoom|slack|adobe|acrobat|notion/i', $nameLower)) {
+                    $category = 'Office productivity';
+                }
+
+                // Check for EOL / unsupported software
+                $stillSupported = 'Yes';
+                $notes = [];
+
+                if (preg_match('/flash player|shockwave|silverlight|quicktime|python 2|office 2010|office 2013/i', $nameLower)) {
+                    $stillSupported = 'No';
+                    $notes[] = 'Out of support / End of Life software';
+                }
+
+                if (isset($securityFindings[$nameLower])) {
+                    $notes[] = $securityFindings[$nameLower];
+                }
+
+                // Avoid duplicate exact names for same company
+                $existing = $company->softwareItems()->where('software_name', $name)->first();
+                if ($existing) {
+                    $existing->update([
+                        'version' => $version ?: $existing->version,
+                        'vendor' => $publisher ?: $existing->vendor,
+                        'still_supported' => $stillSupported,
+                        'notes' => count($notes) ? implode('; ', $notes) : $existing->notes,
+                    ]);
+                } else {
+                    $company->softwareItems()->create([
+                        'category' => $category,
+                        'software_name' => $name,
+                        'version' => $version,
+                        'vendor' => $publisher,
+                        'installed_on' => "Installed on {$machineName}",
+                        'auto_update_on' => 'Yes',
+                        'still_supported' => $stillSupported,
+                        'notes' => count($notes) ? implode('; ', $notes) : null,
+                    ]);
+                    $importedCount++;
+                }
+            }
+
+            return back()->with('success', "Auto-Scan Success! Registered/Updated {$importedCount} software applications into your Cyber Essentials inventory.");
+
+        } catch (\Throwable $e) {
+            return back()->withErrors(['software_file' => 'Failed to process software inventory: ' . $e->getMessage()]);
+        }
     }
 
     public function deleteSoftware($id)
