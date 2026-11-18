@@ -580,6 +580,8 @@
                 </a>
             </div>
         </div>
+        @endif
+
         {{-- ========================================================== --}}
         {{-- TAB 4: MOBILES & TABLETS --}}
         {{-- ========================================================== --}}
@@ -866,8 +868,6 @@
             </div>
         </div>
         @endif
-        </div>
-        @endif
 
         {{-- ========================================================== --}}
         {{-- TAB 6: NETWORK (ROUTERS / FIREWALLS) --}}
@@ -1138,8 +1138,6 @@
                     Next: Software & Apps (Tab 8) &rarr;
                 </a>
             </div>
-        </div>
-        @endif
         </div>
         @endif
 
@@ -1440,9 +1438,6 @@
                         Confirm Governance & Review Full Summary &rarr;
                     </button>
                 </div>
-            </form>
-        </div>
-        @endif
             </form>
         </div>
         @endif
