@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Company;
 use App\Models\ItContact;
 use App\Mail\CompanyWelcomeMail;
+use App\Services\CompanyWorkbookExportService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
@@ -37,6 +38,12 @@ class AdminController extends Controller
         $audit = $company->audit_summary;
 
         return view('admin.view_company', compact('company', 'audit'));
+    }
+
+    public function exportCompany(CompanyWorkbookExportService $exportService, $id)
+    {
+        $company = Company::with(['user', 'staffMembers', 'computers', 'mobileDevices', 'servers', 'networkDevices', 'cloudServices', 'softwareItems', 'itContact'])->findOrFail($id);
+        return $exportService->export($company);
     }
 
     public function storeCompany(Request $request)

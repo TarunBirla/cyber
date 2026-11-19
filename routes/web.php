@@ -38,6 +38,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->prefix('company')->name('company.')->group(function () {
     Route::get('/wizard/{step?}', [CompanyWizardController::class, 'showStep'])->name('wizard');
     Route::get('/summary', [CompanyWizardController::class, 'summary'])->name('summary');
+    Route::get('/export', [CompanyWizardController::class, 'exportWorkbook'])->name('export');
     Route::post('/submit', [CompanyWizardController::class, 'submitAssessment'])->name('submit');
 
     // Tab 1: Company Details
@@ -83,6 +84,7 @@ Route::middleware(['auth'])->prefix('company')->name('company.')->group(function
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/company/{id}', [AdminController::class, 'showCompany'])->name('company.show');
+    Route::get('/company/{id}/export', [AdminController::class, 'exportCompany'])->name('company.export');
     Route::post('/company', [AdminController::class, 'storeCompany'])->name('company.store');
     Route::put('/company/{id}/it-contact', [AdminController::class, 'updateItContact'])->name('company.it-contact.update');
     Route::patch('/company/{id}/status', [AdminController::class, 'updateStatus'])->name('company.status');

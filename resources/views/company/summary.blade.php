@@ -17,6 +17,11 @@
         </div>
 
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+            <a href="{{ route('company.export') }}" class="py-2.5 px-5 rounded-xl text-xs font-bold bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-50 transition shadow-sm text-center flex items-center justify-center gap-1.5" title="Download Cyber Essentials XLSX Workbook">
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <span>Export XLSX</span>
+            </a>
+
             <a href="{{ route('company.wizard', 1) }}" class="py-2.5 px-5 rounded-xl text-xs font-bold bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100 transition shadow-sm text-center">
                 &larr; Return to Step 1
             </a>

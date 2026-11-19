@@ -12,6 +12,7 @@ use App\Models\NetworkDevice;
 use App\Models\CloudService;
 use App\Models\SoftwareItem;
 use App\Models\ItContact;
+use App\Services\CompanyWorkbookExportService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 
@@ -85,6 +86,12 @@ class CompanyWizardController extends Controller
         $company = $this->getCompany();
         $audit = $company->audit_summary;
         return view('company.summary', compact('company', 'audit'));
+    }
+
+    public function exportWorkbook(CompanyWorkbookExportService $exportService)
+    {
+        $company = $this->getCompany();
+        return $exportService->export($company);
     }
 
     public function submitAssessment(Request $request)
