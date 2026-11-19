@@ -390,14 +390,62 @@
                             <span>Get Computer Scanner</span>
                         </button>
 
-                        <!-- Direct JSON File Upload Form -->
-                        <form action="{{ route('company.computer.upload_scan') }}" method="POST" enctype="multipart/form-data" class="flex items-center w-full sm:w-auto">
+                        <!-- Upload JSON Modal Trigger -->
+                        <button type="button" onclick="document.getElementById('deviceUploadModal').classList.remove('hidden')" 
+                            class="w-full sm:w-auto px-4 py-2.5 rounded-xl font-bold text-xs bg-brand-600 hover:bg-brand-700 text-white transition shadow-sm flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                            <span>Upload JSON (Auto-Fill)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Device Upload Modal -->
+                <div id="deviceUploadModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
+                    <div class="ai-card rounded-2xl sm:rounded-3xl p-5 sm:p-7 border border-slate-200 max-w-md w-full max-h-[92vh] overflow-y-auto relative bg-white shadow-2xl">
+                        <button type="button" onclick="document.getElementById('deviceUploadModal').classList.add('hidden')" class="absolute top-4 sm:top-5 right-4 sm:right-5 text-slate-400 hover:text-slate-600 p-1">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center border border-brand-200 shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-base sm:text-lg font-extrabold text-slate-900 leading-tight">Upload Device Scan JSON</h3>
+                                <p class="text-xs text-slate-500">Auto-fill computer inventory and assign to user</p>
+                            </div>
+                        </div>
+
+                        <form action="{{ route('company.computer.upload_scan') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                             @csrf
-                            <label class="cursor-pointer w-full sm:w-auto px-4 py-2.5 rounded-xl font-bold text-xs bg-brand-600 hover:bg-brand-700 text-white transition shadow-sm flex items-center justify-center gap-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                                <span>Upload JSON (Auto-Fill)</span>
-                                <input type="file" name="device_file" accept=".json,.txt" class="hidden" onchange="this.form.submit()">
-                            </label>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                                    Assign Name *
+                                </label>
+                                <input type="text" name="assigned_to" required placeholder="e.g. John Doe / Mohammed Nasar"
+                                    class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-semibold focus:border-brand-500 focus:bg-white focus:outline-none transition">
+                                <p class="text-[11px] text-slate-400 mt-1">Person or employee name this computer is assigned to.</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                                    Scan JSON File *
+                                </label>
+                                <input type="file" name="device_file" accept=".json,.txt" required
+                                    class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 transition focus:outline-none">
+                                <p class="text-[11px] text-slate-400 mt-1">Select the generated <code class="font-mono text-slate-600">my-device.json</code> file.</p>
+                            </div>
+
+                            <div class="pt-2 flex flex-col-reverse sm:flex-row justify-end gap-2">
+                                <button type="button" onclick="document.getElementById('deviceUploadModal').classList.add('hidden')"
+                                    class="w-full sm:w-auto py-2.5 px-4 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition text-center">
+                                    Cancel
+                                </button>
+                                <button type="submit"
+                                    class="w-full sm:w-auto py-2.5 px-6 rounded-xl font-bold text-xs bg-brand-600 hover:bg-brand-700 text-white transition shadow-sm text-center">
+                                    Save & Import Asset
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -530,7 +578,8 @@
                             <th class="p-3 whitespace-nowrap">Make & Model</th>
                             <th class="p-3 whitespace-nowrap">Qty</th>
                             <th class="p-3 whitespace-nowrap">OS & Version</th>
-                            <th class="p-3 whitespace-nowrap">Location / User</th>
+                            <th class="p-3 whitespace-nowrap">Assigned Name</th>
+                            <th class="p-3 whitespace-nowrap">Location</th>
                             <th class="p-3 whitespace-nowrap">OS Supported?</th>
                             <th class="p-3 whitespace-nowrap">Updates & Security</th>
                             <th class="p-3 text-right whitespace-nowrap">Action</th>
@@ -543,7 +592,12 @@
                             <td class="p-3 whitespace-nowrap">{{ $comp->make }} {{ $comp->model }}</td>
                             <td class="p-3 font-mono font-bold text-brand-700 whitespace-nowrap">{{ $comp->quantity }}</td>
                             <td class="p-3 whitespace-nowrap">{{ $comp->operating_system }} <span class="text-slate-400 font-mono">({{ $comp->os_version ?? '-' }})</span></td>
-                            <td class="p-3 whitespace-nowrap">{{ $comp->location }} / <span class="text-slate-500">{{ $comp->assigned_to }}</span></td>
+                            <td class="p-3 whitespace-nowrap">
+                                <span class="font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded-lg border border-slate-200">
+                                    {{ $comp->assigned_to ?: 'Unassigned' }}
+                                </span>
+                            </td>
+                            <td class="p-3 text-slate-500 whitespace-nowrap">{{ $comp->location ?? '-' }}</td>
                             <td class="p-3 whitespace-nowrap">
                                 @if($comp->os_supported == 'Yes')
                                     <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">Yes</span>
@@ -564,7 +618,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="p-8 text-center text-slate-400">
+                            <td colspan="9" class="p-8 text-center text-slate-400">
                                 No computer inventory recorded.
                             </td>
                         </tr>
@@ -1178,14 +1232,62 @@
                             <span>Get Software Scanner</span>
                         </button>
 
-                        <!-- Direct JSON File Upload Form -->
-                        <form action="{{ route('company.software.upload_scan') }}" method="POST" enctype="multipart/form-data" class="flex items-center w-full sm:w-auto">
+                        <!-- Upload JSON Modal Trigger -->
+                        <button type="button" onclick="document.getElementById('softwareUploadModal').classList.remove('hidden')" 
+                            class="w-full sm:w-auto px-4 py-2.5 rounded-xl font-bold text-xs bg-brand-600 hover:bg-brand-700 text-white transition shadow-sm flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                            <span>Upload JSON (Auto-Fill)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Software Upload Modal -->
+                <div id="softwareUploadModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
+                    <div class="ai-card rounded-2xl sm:rounded-3xl p-5 sm:p-7 border border-slate-200 max-w-md w-full max-h-[92vh] overflow-y-auto relative bg-white shadow-2xl">
+                        <button type="button" onclick="document.getElementById('softwareUploadModal').classList.add('hidden')" class="absolute top-4 sm:top-5 right-4 sm:right-5 text-slate-400 hover:text-slate-600 p-1">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center border border-brand-200 shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-base sm:text-lg font-extrabold text-slate-900 leading-tight">Upload Software Scan JSON</h3>
+                                <p class="text-xs text-slate-500">Auto-fill applications inventory and assign to user</p>
+                            </div>
+                        </div>
+
+                        <form action="{{ route('company.software.upload_scan') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                             @csrf
-                            <label class="cursor-pointer w-full sm:w-auto px-4 py-2.5 rounded-xl font-bold text-xs bg-brand-600 hover:bg-brand-700 text-white transition shadow-sm flex items-center justify-center gap-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                                <span>Upload JSON (Auto-Fill)</span>
-                                <input type="file" name="software_file" accept=".json,.txt" class="hidden" onchange="this.form.submit()">
-                            </label>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                                    Assign Name *
+                                </label>
+                                <input type="text" name="assigned_to" required placeholder="e.g. John Doe / Mohammed Nasar / Marketing PC"
+                                    class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-semibold focus:border-brand-500 focus:bg-white focus:outline-none transition">
+                                <p class="text-[11px] text-slate-400 mt-1">Person or workstation name these applications are installed on.</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                                    Scan JSON File *
+                                </label>
+                                <input type="file" name="software_file" accept=".json,.txt" required
+                                    class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 transition focus:outline-none">
+                                <p class="text-[11px] text-slate-400 mt-1">Select the generated <code class="font-mono text-slate-600">my-software.json</code> file.</p>
+                            </div>
+
+                            <div class="pt-2 flex flex-col-reverse sm:flex-row justify-end gap-2">
+                                <button type="button" onclick="document.getElementById('softwareUploadModal').classList.add('hidden')"
+                                    class="w-full sm:w-auto py-2.5 px-4 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition text-center">
+                                    Cancel
+                                </button>
+                                <button type="submit"
+                                    class="w-full sm:w-auto py-2.5 px-6 rounded-xl font-bold text-xs bg-brand-600 hover:bg-brand-700 text-white transition shadow-sm text-center">
+                                    Save & Import Software
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -1257,6 +1359,11 @@
                             class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
                     </div>
                     <div>
+                        <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Assigned Name</label>
+                        <input type="text" name="assigned_to" placeholder="e.g. John Doe / Mohammed Nasar"
+                            class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
+                    </div>
+                    <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Installed On</label>
                         <input type="text" name="installed_on" placeholder="e.g. All laptops & phones"
                             class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
@@ -1294,6 +1401,7 @@
                             <th class="p-3 whitespace-nowrap">Category</th>
                             <th class="p-3 whitespace-nowrap">Software & Vendor</th>
                             <th class="p-3 whitespace-nowrap">Version</th>
+                            <th class="p-3 whitespace-nowrap">Assigned Name</th>
                             <th class="p-3 whitespace-nowrap">Installed On</th>
                             <th class="p-3 whitespace-nowrap">Auto Update?</th>
                             <th class="p-3 whitespace-nowrap">Supported?</th>
@@ -1306,6 +1414,11 @@
                             <td class="p-3 whitespace-nowrap"><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium">{{ $sw->category }}</span></td>
                             <td class="p-3 font-bold text-slate-900 whitespace-nowrap">{{ $sw->software_name }} <span class="text-slate-400 font-normal">({{ $sw->vendor ?? '-' }})</span></td>
                             <td class="p-3 font-mono text-slate-600 whitespace-nowrap">{{ $sw->version ?? 'Latest' }}</td>
+                            <td class="p-3 whitespace-nowrap">
+                                <span class="font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded-lg border border-slate-200">
+                                    {{ $sw->assigned_to ?: ($sw->installed_on ? str_replace('Installed on ', '', $sw->installed_on) : 'All devices') }}
+                                </span>
+                            </td>
                             <td class="p-3 text-slate-500 whitespace-nowrap">{{ $sw->installed_on ?? '-' }}</td>
                             <td class="p-3 whitespace-nowrap">{{ $sw->auto_update_on }}</td>
                             <td class="p-3 whitespace-nowrap">
@@ -1325,7 +1438,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="p-8 text-center text-slate-400">
+                            <td colspan="8" class="p-8 text-center text-slate-400">
                                 No software items declared.
                             </td>
                         </tr>

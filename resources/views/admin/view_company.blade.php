@@ -140,6 +140,7 @@
                         <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold border-b border-slate-200">
                             <tr>
                                 <th class="p-2.5">Device</th>
+                                <th class="p-2.5">Assigned To</th>
                                 <th class="p-2.5">Qty</th>
                                 <th class="p-2.5">OS & Version</th>
                                 <th class="p-2.5">Supported?</th>
@@ -149,6 +150,7 @@
                             @forelse($company->computers as $comp)
                             <tr>
                                 <td class="p-2.5 font-bold text-slate-900">{{ $comp->make }} {{ $comp->model }}</td>
+                                <td class="p-2.5 font-semibold text-slate-800">{{ $comp->assigned_to ?: 'Unassigned' }}</td>
                                 <td class="p-2.5 font-mono font-bold text-brand-700">{{ $comp->quantity }}</td>
                                 <td class="p-2.5">{{ $comp->operating_system }} {{ $comp->os_version }}</td>
                                 <td class="p-2.5">
@@ -158,7 +160,7 @@
                                 </td>
                             </tr>
                             @empty
-                            <tr><td colspan="4" class="p-4 text-center text-slate-400">No computers listed.</td></tr>
+                            <tr><td colspan="5" class="p-4 text-center text-slate-400">No computers listed.</td></tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -253,7 +255,7 @@
                         <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div>
                                 <span class="font-bold text-slate-900 break-words">{{ $sw->software_name }}</span>
-                                <span class="text-slate-500 text-[11px] block">{{ $sw->category }} ({{ $sw->vendor ?? 'Generic' }})</span>
+                                <span class="text-slate-500 text-[11px] block">{{ $sw->category }} ({{ $sw->vendor ?? 'Generic' }}) &bull; Assigned: <strong class="text-slate-700">{{ $sw->assigned_to ?: ($sw->installed_on ? str_replace('Installed on ', '', $sw->installed_on) : 'All devices') }}</strong></span>
                             </div>
                             <span class="self-start sm:self-center px-2 py-0.5 rounded text-[10px] font-bold {{ $sw->still_supported == 'Yes' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200' }}">
                                 Supported: {{ $sw->still_supported }}

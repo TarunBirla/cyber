@@ -13,6 +13,7 @@ use App\Models\CloudService;
 use App\Models\SoftwareItem;
 use App\Models\ItContact;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 class CompanyWizardController extends Controller
 {
@@ -167,6 +168,7 @@ class CompanyWizardController extends Controller
         
         $request->validate([
             'device_file' => 'required|file|mimes:json,txt|max:5120',
+            'assigned_to' => 'required|string|max:255',
         ]);
 
         try {
@@ -192,6 +194,7 @@ class CompanyWizardController extends Controller
             $osSupported = ($device['OS still supported?'] === 'Yes') ? 'Yes' : 'No';
             $autoUpdates = ($device['Auto-updates on?'] === 'Yes') ? 'Yes' : 'No';
             $securityOn = ($device['Firewall & anti-malware on?'] === 'Yes') ? 'Yes' : 'No';
+            $assignedTo = trim($request->input('assigned_to', $device['Assigned to / user(s)'] ?? auth()->user()->name));
 
             $computer = $company->computers()->create([
                 'device_type' => $deviceType,
@@ -201,13 +204,13 @@ class CompanyWizardController extends Controller
                 'operating_system' => $device['Operating system'] ?? 'Windows / macOS',
                 'os_version' => $device['OS version'] ?? '',
                 'location' => $device['Location'] ?? 'Office / Home',
-                'assigned_to' => $device['Assigned to / user(s)'] ?? auth()->user()->name,
+                'assigned_to' => $assignedTo,
                 'os_supported' => $osSupported,
                 'auto_updates_on' => $autoUpdates,
                 'security_software_on' => $securityOn,
             ]);
 
-            return back()->with('success', "Auto-Scan Success! Computer '{$computer->make} {$computer->model}' ({$computer->operating_system}) automatically registered in your inventory.");
+            return back()->with('success', "Auto-Scan Success! Computer '{$computer->make} {$computer->model}' ({$computer->operating_system}) automatically registered and assigned to '{$computer->assigned_to}'.");
 
         } catch (\Throwable $e) {
             return back()->withErrors(['device_file' => 'Failed to parse device file: ' . $e->getMessage()]);
@@ -338,11 +341,16 @@ class CompanyWizardController extends Controller
             'software_name' => 'required|string|max:255',
             'version' => 'nullable|string|max:100',
             'vendor' => 'nullable|string|max:100',
+            'assigned_to' => 'nullable|string|max:255',
             'installed_on' => 'nullable|string|max:255',
             'auto_update_on' => 'required|string',
             'still_supported' => 'required|string',
             'notes' => 'nullable|string',
         ]);
+
+        if (empty($validated['installed_on']) && !empty($validated['assigned_to'])) {
+            $validated['installed_on'] = "Assigned to {$validated['assigned_to']}";
+        }
 
         $company->softwareItems()->create($validated);
         return back()->with('success', 'Software item registered in inventory.');
@@ -358,6 +366,7 @@ class CompanyWizardController extends Controller
 
         $request->validate([
             'software_file' => 'required|file|mimes:json,txt|max:10240',
+            'assigned_to' => 'required|string|max:255',
         ]);
 
         try {
@@ -387,7 +396,18 @@ class CompanyWizardController extends Controller
             }
 
             $machineName = $json['machine'] ?? 'Laptops & Workstations';
+            $assignedTo = trim($request->input('assigned_to'));
             $importedCount = 0;
+
+            // Ensure assigned_to column exists on software_items table
+            if (Schema::hasTable('software_items') && !Schema::hasColumn('software_items', 'assigned_to')) {
+                try {
+                    Schema::table('software_items', function ($table) {
+                        $table->string('assigned_to')->nullable()->after('installed_on');
+                    });
+                } catch (\Throwable $e) {}
+            }
+            $hasAssignedToCol = Schema::hasColumn('software_items', 'assigned_to');
 
             foreach ($rawSoftware as $app) {
                 $name = trim($app['name'] ?? ($app['DisplayName'] ?? ''));
@@ -423,31 +443,42 @@ class CompanyWizardController extends Controller
                     $notes[] = $securityFindings[$nameLower];
                 }
 
+                $installedOnDesc = $assignedTo ? "Assigned to {$assignedTo} ({$machineName})" : "Installed on {$machineName}";
+
                 // Avoid duplicate exact names for same company
                 $existing = $company->softwareItems()->where('software_name', $name)->first();
                 if ($existing) {
-                    $existing->update([
+                    $updateData = [
                         'version' => $version ?: $existing->version,
                         'vendor' => $publisher ?: $existing->vendor,
+                        'installed_on' => $installedOnDesc,
                         'still_supported' => $stillSupported,
                         'notes' => count($notes) ? implode('; ', $notes) : $existing->notes,
-                    ]);
+                    ];
+                    if ($hasAssignedToCol) {
+                        $updateData['assigned_to'] = $assignedTo;
+                    }
+                    $existing->update($updateData);
                 } else {
-                    $company->softwareItems()->create([
+                    $createData = [
                         'category' => $category,
                         'software_name' => $name,
                         'version' => $version,
                         'vendor' => $publisher,
-                        'installed_on' => "Installed on {$machineName}",
+                        'installed_on' => $installedOnDesc,
                         'auto_update_on' => 'Yes',
                         'still_supported' => $stillSupported,
                         'notes' => count($notes) ? implode('; ', $notes) : null,
-                    ]);
+                    ];
+                    if ($hasAssignedToCol) {
+                        $createData['assigned_to'] = $assignedTo;
+                    }
+                    $company->softwareItems()->create($createData);
                     $importedCount++;
                 }
             }
 
-            return back()->with('success', "Auto-Scan Success! Registered/Updated {$importedCount} software applications into your Cyber Essentials inventory.");
+            return back()->with('success', "Auto-Scan Success! Registered/Updated {$importedCount} software applications assigned to '{$assignedTo}'.");
 
         } catch (\Throwable $e) {
             return back()->withErrors(['software_file' => 'Failed to process software inventory: ' . $e->getMessage()]);
