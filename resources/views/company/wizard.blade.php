@@ -295,7 +295,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        @forelse($company->staffMembers as $staff)
+                        @forelse(($staffMembers ?? $company->staffMembers) as $staff)
                         <tr class="hover:bg-slate-50/60 transition">
                             <td class="p-3 font-bold text-slate-900 whitespace-nowrap">{{ $staff->full_name }}</td>
                             <td class="p-3 whitespace-nowrap">{{ $staff->job_role ?? '-' }}</td>
@@ -340,6 +340,12 @@
                     </tbody>
                 </table>
             </div>
+
+            @if(isset($staffMembers) && method_exists($staffMembers, 'links'))
+                <div class="mt-4">
+                    {{ $staffMembers->links() }}
+                </div>
+            @endif
 
             <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-slate-100 flex flex-col-reverse sm:flex-row gap-3 sm:gap-0 justify-between items-stretch sm:items-center">
                 <a href="{{ route('company.wizard', 1) }}" class="text-xs text-slate-500 hover:text-slate-900 font-medium text-center sm:text-left py-2 sm:py-0">&larr; Back to Company Details</a>
@@ -586,7 +592,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        @forelse($company->computers as $comp)
+                        @forelse(($computers ?? $company->computers) as $comp)
                         <tr class="hover:bg-slate-50/60 transition">
                             <td class="p-3 font-bold text-slate-900 whitespace-nowrap">{{ $comp->device_type }}</td>
                             <td class="p-3 whitespace-nowrap">{{ $comp->make }} {{ $comp->model }}</td>
@@ -626,6 +632,12 @@
                     </tbody>
                 </table>
             </div>
+
+            @if(isset($computers) && method_exists($computers, 'links'))
+                <div class="mt-4">
+                    {{ $computers->links() }}
+                </div>
+            @endif
 
             <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-slate-100 flex flex-col-reverse sm:flex-row gap-3 sm:gap-0 justify-between items-stretch sm:items-center">
                 <a href="{{ route('company.wizard', 2) }}" class="text-xs text-slate-500 hover:text-slate-900 font-medium text-center sm:text-left py-2 sm:py-0">&larr; Back to Staff</a>
@@ -747,7 +759,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        @forelse($company->mobileDevices as $mob)
+                        @forelse(($mobileDevices ?? $company->mobileDevices) as $mob)
                         <tr class="hover:bg-slate-50/60 transition">
                             <td class="p-3 font-bold text-slate-900 whitespace-nowrap">{{ $mob->device_type }}</td>
                             <td class="p-3 whitespace-nowrap">{{ $mob->make }} {{ $mob->model }}</td>
@@ -781,6 +793,12 @@
                     </tbody>
                 </table>
             </div>
+
+            @if(isset($mobileDevices) && method_exists($mobileDevices, 'links'))
+                <div class="mt-4">
+                    {{ $mobileDevices->links() }}
+                </div>
+            @endif
 
             <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-slate-100 flex flex-col-reverse sm:flex-row gap-3 sm:gap-0 justify-between items-stretch sm:items-center">
                 <a href="{{ route('company.wizard', 3) }}" class="text-xs text-slate-500 hover:text-slate-900 font-medium text-center sm:text-left py-2 sm:py-0">&larr; Back to Computers</a>
@@ -881,7 +899,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        @forelse($company->servers as $srv)
+                        @forelse(($servers ?? $company->servers) as $srv)
                         <tr class="hover:bg-slate-50/60 transition">
                             <td class="p-3 font-bold text-slate-900 whitespace-nowrap">{{ $srv->server_name }}</td>
                             <td class="p-3 font-mono font-bold text-brand-700 whitespace-nowrap">{{ $srv->quantity }}</td>
@@ -913,6 +931,12 @@
                     </tbody>
                 </table>
             </div>
+
+            @if(isset($servers) && method_exists($servers, 'links'))
+                <div class="mt-4">
+                    {{ $servers->links() }}
+                </div>
+            @endif
 
             <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-slate-100 flex flex-col-reverse sm:flex-row gap-3 sm:gap-0 justify-between items-stretch sm:items-center">
                 <a href="{{ route('company.wizard', 4) }}" class="text-xs text-slate-500 hover:text-slate-900 font-medium text-center sm:text-left py-2 sm:py-0">&larr; Back to Mobiles</a>
@@ -1023,7 +1047,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        @forelse($company->networkDevices as $net)
+                        @forelse(($networkDevices ?? $company->networkDevices) as $net)
                         <tr class="hover:bg-slate-50/60 transition">
                             <td class="p-3 font-bold text-slate-900 whitespace-nowrap">{{ $net->location }}</td>
                             <td class="p-3 whitespace-nowrap">{{ $net->make }} {{ $net->model }}</td>
@@ -1055,6 +1079,12 @@
                     </tbody>
                 </table>
             </div>
+
+            @if(isset($networkDevices) && method_exists($networkDevices, 'links'))
+                <div class="mt-4">
+                    {{ $networkDevices->links() }}
+                </div>
+            @endif
 
             <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-slate-100 flex flex-col-reverse sm:flex-row gap-3 sm:gap-0 justify-between items-stretch sm:items-center">
                 <a href="{{ route('company.wizard', 5) }}" class="text-xs text-slate-500 hover:text-slate-900 font-medium text-center sm:text-left py-2 sm:py-0">&larr; Back to Servers</a>
@@ -1153,7 +1183,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        @forelse($company->cloudServices as $cloud)
+                        @forelse(($cloudServices ?? $company->cloudServices) as $cloud)
                         <tr class="hover:bg-slate-50/60 transition">
                             <td class="p-3 font-bold text-slate-900 whitespace-nowrap">{{ $cloud->service_name }}</td>
                             <td class="p-3 whitespace-nowrap">{{ $cloud->purpose }} <span class="text-slate-400 font-medium">({{ $cloud->provider ?? '-' }})</span></td>
@@ -1185,6 +1215,12 @@
                     </tbody>
                 </table>
             </div>
+
+            @if(isset($cloudServices) && method_exists($cloudServices, 'links'))
+                <div class="mt-4">
+                    {{ $cloudServices->links() }}
+                </div>
+            @endif
 
             <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-slate-100 flex flex-col-reverse sm:flex-row gap-3 sm:gap-0 justify-between items-stretch sm:items-center">
                 <a href="{{ route('company.wizard', 6) }}" class="text-xs text-slate-500 hover:text-slate-900 font-medium text-center sm:text-left py-2 sm:py-0">&larr; Back to Network</a>
@@ -1409,7 +1445,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        @forelse($company->softwareItems as $sw)
+                        @forelse(($softwareItems ?? $company->softwareItems) as $sw)
                         <tr class="hover:bg-slate-50/60 transition">
                             <td class="p-3 whitespace-nowrap"><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium">{{ $sw->category }}</span></td>
                             <td class="p-3 font-bold text-slate-900 whitespace-nowrap">{{ $sw->software_name }} <span class="text-slate-400 font-normal">({{ $sw->vendor ?? '-' }})</span></td>
@@ -1446,6 +1482,12 @@
                     </tbody>
                 </table>
             </div>
+
+            @if(isset($softwareItems) && method_exists($softwareItems, 'links'))
+                <div class="mt-4">
+                    {{ $softwareItems->links() }}
+                </div>
+            @endif
 
             <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-slate-100 flex flex-col-reverse sm:flex-row gap-3 sm:gap-0 justify-between items-stretch sm:items-center">
                 <a href="{{ route('company.wizard', 7) }}" class="text-xs text-slate-500 hover:text-slate-900 font-medium text-center sm:text-left py-2 sm:py-0">&larr; Back to Cloud Services</a>

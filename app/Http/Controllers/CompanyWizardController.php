@@ -58,7 +58,26 @@ class CompanyWizardController extends Controller
         $company = $this->getCompany();
         $audit = $company->audit_summary;
 
-        return view('company.wizard', compact('company', 'step', 'audit'));
+        $staffMembers = ($step == 2) ? $company->staffMembers()->paginate(10)->withQueryString() : collect();
+        $computers = ($step == 3) ? $company->computers()->paginate(10)->withQueryString() : collect();
+        $mobileDevices = ($step == 4) ? $company->mobileDevices()->paginate(10)->withQueryString() : collect();
+        $servers = ($step == 5) ? $company->servers()->paginate(10)->withQueryString() : collect();
+        $networkDevices = ($step == 6) ? $company->networkDevices()->paginate(10)->withQueryString() : collect();
+        $cloudServices = ($step == 7) ? $company->cloudServices()->paginate(10)->withQueryString() : collect();
+        $softwareItems = ($step == 8) ? $company->softwareItems()->paginate(10)->withQueryString() : collect();
+
+        return view('company.wizard', compact(
+            'company',
+            'step',
+            'audit',
+            'staffMembers',
+            'computers',
+            'mobileDevices',
+            'servers',
+            'networkDevices',
+            'cloudServices',
+            'softwareItems'
+        ));
     }
 
     public function summary()
