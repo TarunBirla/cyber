@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->integer('headcount')->nullable()->default(0);
             $table->string('sic_code')->nullable();
-            $table->string('certification_level')->default('Cyber Essentials'); // Cyber Essentials or Cyber Essentials Plus
+            $table->string('certification_level')->default('Cyber Security'); // Cyber Security or Cyber Security Plus
             $table->string('certification_scope')->default('Whole company');
             $table->date('date_completed')->nullable();
             $table->string('completed_by')->nullable();

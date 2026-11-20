@@ -10,14 +10,14 @@
         <div>
             <div class="flex items-center gap-2 sm:gap-2.5">
                 <span class="ai-badge bg-emerald-50 text-emerald-700 border border-emerald-200">Audit Matrix</span>
-                <span class="text-xs text-slate-500 font-medium">Cyber Essentials Readiness Verification</span>
+                <span class="text-xs text-slate-500 font-medium">Cyber Security Readiness Verification</span>
             </div>
             <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight mt-1.5">{{ $company->registered_name ?? 'Company Inventory' }}</h1>
             <p class="text-xs text-slate-500 mt-1">Automatic verification formulas across all 9 tabs. Compliant with UK Information Gathering Workbook format.</p>
         </div>
 
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
-            <a href="{{ route('company.export') }}" class="py-2.5 px-5 rounded-xl text-xs font-bold bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-50 transition shadow-sm text-center flex items-center justify-center gap-1.5" title="Download Cyber Essentials XLSX Workbook">
+            <a href="{{ route('company.export') }}" class="py-2.5 px-5 rounded-xl text-xs font-bold bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-50 transition shadow-sm text-center flex items-center justify-center gap-1.5" title="Download Cyber Security XLSX Workbook">
                 <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 <span>Export XLSX</span>
             </a>
@@ -75,7 +75,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 </div>
                 <div>
-                    <h2 class="text-sm sm:text-base font-extrabold text-slate-900">UK Cyber Essentials Risk Checks (Target: 0)</h2>
+                    <h2 class="text-sm sm:text-base font-extrabold text-slate-900">UK Cyber Security Risk Checks (Target: 0)</h2>
                     <p class="text-xs text-slate-500">6 core failure conditions are automatically flagged from your asset inventory.</p>
                 </div>
             </div>
@@ -308,7 +308,7 @@
 
             <div class="pt-4 sm:pt-6 border-t border-slate-100 mt-6">
                 <div class="text-[11px] text-slate-500 font-medium">
-                    <strong class="text-slate-700">Audit Assurance:</strong> Certified information gathering workbook designed for UK Cyber Essentials and Cyber Essentials Plus assessments.
+                    <strong class="text-slate-700">Audit Assurance:</strong> Certified information gathering workbook designed for UK Cyber Security and Cyber Security Plus assessments.
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Essentials - Live Database Auto-Setup</title>
+    <title>Cyber Security - Live Database Auto-Setup</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -28,7 +28,7 @@
                     {{ $success ? 'Deployment Complete' : 'Deployment Failed' }}
                 </span>
                 <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">Live Database Deployment Engine</h1>
-                <p class="text-xs text-slate-500">Nexteck Limited &bull; UK Cyber Essentials Framework</p>
+                <p class="text-xs text-slate-500">Nexteck Limited &bull; UK Cyber Security Framework</p>
             </div>
         </div>
 
@@ -91,7 +91,7 @@
         @endif
 
         <div class="mt-8 text-center text-xs text-slate-400">
-            Nexteck Limited &bull; Cyber Essentials UK Automated Framework
+            Nexteck Limited &bull; Cyber Security UK Automated Framework
         </div>
     </div>
 </body>

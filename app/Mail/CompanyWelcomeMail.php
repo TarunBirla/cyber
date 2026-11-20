@@ -32,7 +32,7 @@ class CompanyWelcomeMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Welcome to Cyber Essentials Portal - Nexteck Limited',
+            subject: 'Welcome to Cyber Security Portal - Nexteck Limited',
         );
     }
 

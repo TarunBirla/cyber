@@ -2,7 +2,7 @@
 'use strict';
 /**
  * device-register.js
- * Collects the details of THIS Mac or Windows computer for a Cyber Essentials
+ * Collects the details of THIS Mac or Windows computer for a Cyber Security
  * asset register. Needs only Node.js 14+. No npm packages. Read-only: it changes nothing.
  *
  * Columns produced: Device type, Make, Model, Quantity, Operating system, OS version,
@@ -280,7 +280,7 @@ const csvHeader = () => COLUMNS.map(csvCell).join(',');
 const strip = (rec) => { const o = {}; COLUMNS.forEach((c) => { o[c] = rec[c]; }); return o; };
 
 function printDevice(rec) {
-  console.log('\nCYBER ESSENTIALS DEVICE REGISTER ENTRY\n');
+  console.log('\nCyber Security DEVICE REGISTER ENTRY\n');
   COLUMNS.filter((c) => c !== 'Issues / notes').forEach((c) => console.log(`${c.padEnd(30)} ${Array.isArray(rec[c]) ? rec[c].join('; ') : rec[c]}`));
   const d = rec._detail || {};
   if (d.antimalware) console.log(`${'Anti-malware detail'.padEnd(30)} ${d.antimalware}`);

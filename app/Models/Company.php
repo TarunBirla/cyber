@@ -57,7 +57,7 @@ class Company extends Model
     }
 
     /**
-     * Compute Cyber Essentials Compliance and Risk flags matching Excel summary
+     * Compute Cyber Security Compliance and Risk flags matching Excel summary
      */
     public function getAuditSummaryAttribute()
     {
@@ -77,7 +77,7 @@ class Company extends Model
         $itContact = $this->itContact;
         $itContactFilled = $itContact && !empty($itContact->name) && !empty($itContact->email);
 
-        // Risk Flags (must ideally be 0 for passing Cyber Essentials)
+        // Risk Flags (must ideally be 0 for passing Cyber Security)
         $unsupportedComputers = $this->computers()->where('os_supported', 'No')->sum('quantity');
         $unsupportedMobiles = $this->mobileDevices()->where('os_supported', 'No')->sum('quantity');
         $unsupportedServers = $this->servers()->where('os_supported', 'No')->sum('quantity');

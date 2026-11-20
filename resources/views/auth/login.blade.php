@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Sign In - Cyber Essentials Portal')
+@section('title', 'Sign In - Cyber Security Portal')
 
 @section('content')
 <div class="max-w-md mx-auto px-3 sm:px-4 py-8 sm:py-16">
@@ -48,7 +48,7 @@
             </div>
 
             <button type="submit" class="w-full py-3.5 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-brand-600 to-teal-600 text-white hover:from-brand-700 hover:to-teal-700 shadow-md shadow-brand-600/25 transition duration-200 mt-2">
-                Sign In to Cyber Essentials &rarr;
+                Sign In to Cyber Security &rarr;
             </button>
         </form>
 

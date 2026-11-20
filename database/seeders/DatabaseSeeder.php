@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'contact@acmeltd.co.uk',
                 'headcount' => 12,
                 'sic_code' => '62020',
-                'certification_level' => 'Cyber Essentials',
+                'certification_level' => 'Cyber Security',
                 'certification_scope' => 'Whole company',
                 'date_completed' => now()->toDateString(),
                 'completed_by' => 'Jane Smith',

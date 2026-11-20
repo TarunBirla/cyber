@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Register Company - Cyber Essentials Scope')
+@section('title', 'Register Company - Cyber Security Scope')
 
 @section('content')
 <div class="max-w-lg mx-auto px-3 sm:px-4 py-6 sm:py-12">
@@ -11,7 +11,7 @@
                 <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
             </div>
             <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Register UK Company</h1>
-            <p class="text-xs text-slate-500 mt-1">Start your Cyber Essentials 9-Tab Scope & Asset Workbook</p>
+            <p class="text-xs text-slate-500 mt-1">Start your Cyber Security 9-Tab Scope & Asset Workbook</p>
         </div>
 
         <form action="{{ route('register.post') }}" method="POST" class="space-y-4">

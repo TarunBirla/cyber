@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>@yield('title', 'Cyber Essentials Information Gathering') - Nexteck Limited</title>
+    <title>@yield('title', 'Cyber Security Information Gathering') - Nexteck Limited</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script>
@@ -99,7 +99,7 @@
                     </div>
                     <div class="min-w-0">
                         <div class="flex items-center gap-1.5 sm:gap-2">
-                            <span class="font-extrabold text-slate-900 text-sm sm:text-base tracking-tight truncate">Cyber Essentials</span>
+                            <span class="font-extrabold text-slate-900 text-sm sm:text-base tracking-tight truncate">Cyber Security</span>
                             <span class="ai-badge bg-brand-50 text-brand-700 border border-brand-200 hidden xs:inline-flex text-[10px] py-0.5 px-2">AI Verified</span>
                         </div>
                         <p class="text-[10px] sm:text-[11px] text-slate-500 font-medium truncate">Nexteck Limited • UK Scope Engine</p>
@@ -191,7 +191,7 @@
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
             <div class="flex items-center justify-center md:justify-start gap-2 font-medium text-slate-600 text-center md:text-left">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0"></span>
-                <span>UK Cyber Essentials Scope Gathering System &bull; In accordance with NCSC Standards</span>
+                <span>UK Cyber Security Scope Gathering System &bull; In accordance with NCSC Standards</span>
             </div>
             <div class="text-center md:text-right text-slate-600 font-medium leading-relaxed">
                 Managed by <strong class="text-slate-900">Nexteck Limited</strong> | Mohammed Nasar (CEO & Enterprise Architect) | Tel: <a href="tel:07879175585" class="hover:text-brand-600 hover:underline">07879 175585</a>

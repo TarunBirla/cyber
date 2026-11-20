@@ -1,9 +1,9 @@
 @echo off
 setlocal
-title Cyber Essentials Software Inventory Scanner
+title Cyber Security Software Inventory Scanner
 cls
 echo ====================================================
-echo  Cyber Essentials Software Inventory Scanner
+echo  Cyber Security Software Inventory Scanner
 echo  Nexteck Limited - London, UK
 echo ====================================================
 echo.

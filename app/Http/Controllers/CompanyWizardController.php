@@ -103,7 +103,7 @@ class CompanyWizardController extends Controller
             'completed_by' => Auth::user()->name
         ]);
 
-        return redirect()->route('company.summary')->with('success', 'Cyber Essentials Information Gathering Workbook submitted successfully for review!');
+        return redirect()->route('company.summary')->with('success', 'Cyber Security Information Gathering Workbook submitted successfully for review!');
     }
 
     // Step 1: Save Company Details

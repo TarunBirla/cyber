@@ -45,7 +45,7 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our Cyber Essentials records.',
+            'email' => 'The provided credentials do not match our Cyber Security records.',
         ])->onlyInput('email');
     }
 

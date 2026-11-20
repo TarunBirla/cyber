@@ -14,7 +14,7 @@ class EnsureAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if (!$request->user() || !$request->user()->isAdmin()) {
-            abort(403, 'Unauthorized. Access restricted to Cyber Essentials Auditors & Admins.');
+            abort(403, 'Unauthorized. Access restricted to Cyber Security Auditors & Admins.');
         }
 
         return $next($request);

@@ -1,9 +1,9 @@
 @echo off
 setlocal
-title Cyber Essentials Device Scanner
+title Cyber Security Device Scanner
 cls
 echo ====================================================
-echo  Cyber Essentials Automatic Device Scanner
+echo  Cyber Security Automatic Device Scanner
 echo  Nexteck Limited - London, UK
 echo ====================================================
 echo.

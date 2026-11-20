@@ -129,7 +129,7 @@
                             </span>
                         </td>
                         <td class="p-3 sm:p-4 text-right space-x-2 whitespace-nowrap">
-                            <a href="{{ route('admin.company.export', $comp->id) }}" class="text-xs font-bold px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition inline-flex items-center gap-1.5 shadow-sm" title="Download Cyber Essentials XLSX Workbook">
+                            <a href="{{ route('admin.company.export', $comp->id) }}" class="text-xs font-bold px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition inline-flex items-center gap-1.5 shadow-sm" title="Download Cyber Security XLSX Workbook">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                 <span>Export XLSX</span>
                             </a>
@@ -160,7 +160,7 @@
         </button>
 
         <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 mb-1 pr-6">Create New UK Company Profile</h3>
-        <p class="text-xs text-slate-500 mb-5 sm:mb-6">Initialize their Cyber Essentials workbook and email access credentials directly.</p>
+        <p class="text-xs text-slate-500 mb-5 sm:mb-6">Initialize their Cyber Security workbook and email access credentials directly.</p>
 
         <form action="{{ route('admin.company.store') }}" method="POST" class="space-y-4">
             @csrf
@@ -192,8 +192,8 @@
             <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Planned Certification</label>
                 <select name="certification_level" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:border-brand-500 focus:outline-none">
-                    <option value="Cyber Essentials">Cyber Essentials</option>
-                    <option value="Cyber Essentials Plus">Cyber Essentials Plus</option>
+                    <option value="Cyber Security">Cyber Security</option>
+                    <option value="Cyber Security Plus">Cyber Security Plus</option>
                 </select>
             </div>
 

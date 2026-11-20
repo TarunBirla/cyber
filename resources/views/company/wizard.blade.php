@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Cyber Essentials Workbook - Step ' . $step)
+@section('title', 'Cyber Security Workbook - Step ' . $step)
 
 @section('content')
 <div class="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
@@ -10,7 +10,7 @@
         <div>
             <div class="flex items-center gap-2 sm:gap-2.5">
                 <span class="ai-badge bg-brand-50 text-brand-700 border border-brand-200">Step {{ $step }} of 9</span>
-                <span class="text-xs text-slate-500 font-medium">UK Cyber Essentials Workbook</span>
+                <span class="text-xs text-slate-500 font-medium">UK Cyber Security Workbook</span>
             </div>
             <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight mt-1.5">{{ $company->registered_name ?? 'Company Inventory' }}</h1>
             <p class="text-xs text-slate-500 mt-0.5">Scoping & Asset Inventory Data Gathering</p>
@@ -114,8 +114,8 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Certification Level Planned *</label>
                         <select name="certification_level" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:bg-white focus:border-brand-500">
-                            <option value="Cyber Essentials" {{ old('certification_level', $company->certification_level) == 'Cyber Essentials' ? 'selected' : '' }}>Cyber Essentials (Self-Assessment)</option>
-                            <option value="Cyber Essentials Plus" {{ old('certification_level', $company->certification_level) == 'Cyber Essentials Plus' ? 'selected' : '' }}>Cyber Essentials Plus (Audited Hands-on)</option>
+                            <option value="Cyber Security" {{ old('certification_level', $company->certification_level) == 'Cyber Security' ? 'selected' : '' }}>Cyber Security (Self-Assessment)</option>
+                            <option value="Cyber Security Plus" {{ old('certification_level', $company->certification_level) == 'Cyber Security Plus' ? 'selected' : '' }}>Cyber Security Plus (Audited Hands-on)</option>
                         </select>
                     </div>
 
@@ -382,7 +382,7 @@
                             <span class="ai-badge bg-white text-brand-700 border border-brand-200">🤖 Non-Technical 1-Click Scan</span>
                             <span class="text-xs font-bold text-slate-700">Don't know your exact OS Build or Anti-malware details?</span>
                         </div>
-                        <h3 class="text-sm sm:text-base font-extrabold text-slate-900">Run the Automatic Cyber Essentials Scanner on this Mac/PC</h3>
+                        <h3 class="text-sm sm:text-base font-extrabold text-slate-900">Run the Automatic Cyber Security Scanner on this Mac/PC</h3>
                         <p class="text-xs text-slate-600 max-w-2xl leading-relaxed">
                             Run our lightweight, read-only script. It inspects your <strong>Make, Model, OS Version, Support Lifespan, Firewall, and Antivirus</strong> in 5 seconds and generates a <code class="font-mono bg-white px-1.5 py-0.5 rounded border border-slate-200 text-brand-700 font-bold">my-device.json</code> file.
                         </p>
@@ -1106,7 +1106,7 @@
                         <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center text-xs sm:text-sm font-bold border border-brand-200 flex-shrink-0">7</span>
                         <span>Cloud Services & SaaS</span>
                     </h2>
-                    <p class="text-xs text-slate-500 mt-1">Everything you use online: email, storage, accounting, CRM. Cyber Essentials mandates MFA on cloud admin accounts.</p>
+                    <p class="text-xs text-slate-500 mt-1">Everything you use online: email, storage, accounting, CRM. Cyber Security mandates MFA on cloud admin accounts.</p>
                 </div>
             </div>
 
@@ -1510,7 +1510,7 @@
                         <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center text-xs sm:text-sm font-bold border border-brand-200 flex-shrink-0">9</span>
                         <span>IT Contact & Security Governance</span>
                     </h2>
-                    <p class="text-xs text-slate-500 mt-1">Designated Managed Service Provider (MSP) and IT Governance for Cyber Essentials Certification.</p>
+                    <p class="text-xs text-slate-500 mt-1">Designated Managed Service Provider (MSP) and IT Governance for Cyber Security Certification.</p>
                 </div>
                 <span class="ai-badge bg-emerald-50 text-emerald-700 border border-emerald-200 self-start sm:self-auto">Pre-Verified & Locked</span>
             </div>

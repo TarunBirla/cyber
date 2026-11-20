@@ -22,7 +22,7 @@ class CompanyWorkbookExportService
         }
 
         if (!file_exists($templatePath)) {
-            abort(500, 'Cyber Essentials Excel workbook template file not found.');
+            abort(500, 'Cyber Security Excel workbook template file not found.');
         }
 
         // Ensure relations are loaded
@@ -168,7 +168,7 @@ class CompanyWorkbookExportService
             18 => $company->email ?: ($company->user->email ?? ''),
             19 => (int)($company->headcount ?? 0),
             20 => $company->sic_code ?? '',
-            21 => $company->certification_level ?? 'Cyber Essentials',
+            21 => $company->certification_level ?? 'Cyber Security',
             22 => $company->certification_scope ?? 'Whole company',
             23 => $company->date_completed ? date('d/m/Y', strtotime($company->date_completed)) : date('d/m/Y'),
             24 => $company->completed_by ?: ($company->user->name ?? 'Administrator'),

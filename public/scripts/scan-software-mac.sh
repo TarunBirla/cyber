@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "===================================================="
-echo " Cyber Essentials Software Inventory Scanner (macOS)"
+echo " Cyber Security Software Inventory Scanner (macOS)"
 echo " Nexteck Limited - London, UK"
 echo "===================================================="
 echo ""

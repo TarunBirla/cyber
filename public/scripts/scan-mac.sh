@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "===================================================="
-echo " Cyber Essentials Automatic Device Scanner (macOS)"
+echo " Cyber Security Automatic Device Scanner (macOS)"
 echo " Nexteck Limited - London, UK"
 echo "===================================================="
 echo ""

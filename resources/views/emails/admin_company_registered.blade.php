@@ -21,7 +21,7 @@
                     Hello <strong>Mohammed Nasar</strong>,
                 </p>
                 <p style="font-size: 14px; color: #334155; line-height: 1.6;">
-                    A new company has registered on the <strong>Cyber Essentials Information Gathering Portal</strong>. Their workbook is now in <em>Draft</em> status awaiting completion.
+                    A new company has registered on the <strong>Cyber Security Information Gathering Portal</strong>. Their workbook is now in <em>Draft</em> status awaiting completion.
                 </p>
 
                 <!-- Company Details Card -->
@@ -57,7 +57,7 @@
         <!-- Footer -->
         <tr>
             <td style="padding: 16px 36px; background-color: #f1f5f9; text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #e2e8f0;">
-                Nexteck Limited • Cyber Essentials Automated Notification
+                Nexteck Limited • Cyber Security Automated Notification
             </td>
         </tr>
     </table>
